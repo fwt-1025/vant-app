@@ -1,0 +1,136 @@
+/*
+* made at 2019/05/14
+*/
+.header-search{
+  position: fixed;
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+  z-index: 999999;
+  justify-content: space-around;
+  background: linear-gradient(60deg, rgb(255,100,20), #f00);
+  .login i, .helper i{
+    font-size: 16px;
+  }
+  .login,.helper{
+    text-align: center;
+    font-size: 10px;
+    color: #fff;
+  }
+  .search-box{
+    width: 60vw;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 15px;
+    background: #fff;
+    padding-left: 10px;
+    input {
+      border:0;
+      outline: 0;
+    }
+    input:disabled {
+      background: none !important
+    }
+  }
+}
+.van-icon, .van-icon::before{
+  top: 3px;
+}
+
+.hot {
+  background: linear-gradient(60deg, rgb(255,100,20), #f00);
+  color: #fff;
+  font-size: 12px;
+  padding:5px 0;
+  display: flex;
+  justify-content: space-around;
+  span{
+    display: inline-block;
+    width: 70px;
+    height: 20px;
+    border-radius: 15px;
+    background: rgba(255, 166, 0, .6);
+    text-align: center;
+  }
+}
+.home-list{
+  width: 100%;
+  // height: 80px;
+  overflow-x:scroll;
+  .list-box{
+    width: 160%;
+    a{
+      position: relative;
+      display: inline-block;
+      width:20vw;
+      height: 50px;
+      margin:5px 0;
+      font-size: 12px;
+      img{
+        position: absolute;
+        border-radius: 50%;
+        width:30px;
+        height:30px;
+        border:1px solid #00f;
+        top:0;
+        left:50%;
+        margin-left:-15px;
+      }
+      p{
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        margin-left: -15px;
+      }
+    }
+  }
+}
+.home-list>.list-box>a>div>div{
+  /*display: inline-block;*/
+  width:35px;
+  height: 35px;
+  margin: 0 auto;
+  border-radius: 50%;
+}
+.item-list0 {
+  background:url('../assets/clo-icon/backg.png') -4px -160px;
+}
+.item-list1{
+  background: url('../assets/clo-icon/backg.png') -164px -2px;
+}
+.item-list2{
+  background: url('../assets/clo-icon/backg.png') -110px -55px;
+}
+.item-list3{
+  background: url('../assets/clo-icon/backg.png') -4px -55px;
+}
+.item-list4{
+  background: url('../assets/clo-icon/backg.png') -110px -160px;
+}
+.item-list5{
+  background: url('../assets/clo-icon/backg.png') -4px -105px;
+}
+.item-list6{
+  background: url('../assets/clo-icon/backg.png') -58px -160px;
+}
+.item-list7{
+  background: url('../assets/clo-icon/backg.png') -164px -55px;
+}
+.hot-box{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  div{
+    // flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 47%;
+    height: 100px;
+    border:1px solid #ccc;
+    border-radius: 5px;
+    margin: 6px;
+    box-sizing: border-box;
+    background: linear-gradient(60deg, rgb(255,100,20), #f00)
+  }
+}
