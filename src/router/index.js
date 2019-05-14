@@ -80,6 +80,20 @@ const router = new Router({
   }, {
     path: '/register',
     component: () => import('@/components/Register.vue')
+  }, {
+    path: '/goodsDetail',
+    component: () => import('@/components/goodsDetail.vue'),
+    meta: {
+      requireLogin: true,
+      auth: '10001'
+    }
+  }, {
+    path: '/goodsDetail/pay',
+    component: () => import('@/components/buyGoods.vue'),
+    meta: {
+      requireLogin: true,
+      auth: '10001'
+    }
   }]
 })
 router.beforeEach((to, from, next) => {

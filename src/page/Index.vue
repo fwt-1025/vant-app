@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-view></router-view>
-    <van-tabbar v-model="active">
+    <van-tabbar v-model="$store.state.activeMenu">
       <van-tabbar-item icon="wap-home" v-if="buyer === '10001'" to='/home'>首页</van-tabbar-item>
       <van-tabbar-item icon="send-gift-o" v-if="buyer === '10001'" to='/smallpay' dot>微淘</van-tabbar-item>
       <van-tabbar-item icon="chat-o" v-if="buyer === '10001'" to="/message" :info="msgContent">消息</van-tabbar-item>
@@ -20,7 +20,6 @@ import {mapState} from 'vuex'
 export default {
   data () {
     return {
-      active: this.$store.state.activeMenu,
       msgContent: null,
       cartGoods: null
     }
@@ -29,11 +28,10 @@ export default {
     buyer: state => state.buyer.auth || '',
     business: state => state.business.auth || ''
   }),
+  created () {
+    this.$store.commit('setActiveMenu', 0)
+  },
   mounted () {
-    console.log(this.active)
-    console.log(this.$store.state.activeMenu)
-    // console.log('buyer',this.buyer)
-    // console.log('business',this.business)
   }
 }
 </script>

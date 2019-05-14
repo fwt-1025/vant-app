@@ -16,20 +16,20 @@ export const loginBusiness = (users) => Vue.axios.post(api + '/loginBusiness', u
 // add to cart
 export const saveCart = obj => Vue.axios.post(api + '/addtocart', obj).then(res => res.data)
 // get from cart
-export const getCartGoods = id => Vue.axios.get('/apis/getcartgoods', {params: id}).then(res => res.data)
+export const getCartGoods = id => Vue.axios.get(api + '/getcartgoods', {params: id}).then(res => res.data)
 // delete from cart
-export const deleteCartGoods = id => Vue.axios.post('/apis/deletecartgoods', id).then(res => res.data)
-export const saveAddress = val => Vue.axios.post('/apis/saveAddress', val).then(res => res.data)
-export const payList = val => Vue.axios.post('/apis/paylist', val).then(res => res.data)
-export const getpayList = val => Vue.axios.get('/apis/getPayList', val).then(res => res.data)
-export const getSellerGoods = _ => Vue.axios.get('/apis/getGoods').then(res => res.data)
+export const deleteCartGoods = id => Vue.axios.post(api + '/deletecartgoods', id).then(res => res.data)
+export const saveAddress = val => Vue.axios.post(api + '/saveAddress', val).then(res => res.data)
+export const payList = val => Vue.axios.post(api + '/paylist', val).then(res => res.data)
+export const getpayList = val => Vue.axios.get(api + '/getPayList', val).then(res => res.data)
+export const getSellerGoods = _ => Vue.axios.get(api + '/getGoods').then(res => res.data)
 
-export const getGoods = (obj) => Vue.axios.post('/apis/getVipGoods', obj).then(res => res.data)
+export const getGoods = (obj) => Vue.axios.post(api + '/getVipGoods', obj).then(res => res.data)
 /*
 * author: Miss.Wang
 * 2018-12-19
 */
 export const getsearchList = (obj) => Vue.axios.get('https://suggest.taobao.com/sug', {params: obj}).then(res => res.data)
 
-export const getChat = () => Vue.axios.get('/apis/getChat').then(res => res.data)
-export const setChat = (obj) => Vue.axios.post('/apis/setChat', obj).then(res => res.data)
+export const getChat = () => Vue.axios.get(api + '/getChat').then(res => res.data)
+export const setChat = (obj) => Vue.axios.post(api + '/setChat', obj).then(res => res.data)

@@ -1,5 +1,11 @@
 <template>
   <div class="loginBox">
+    <van-nav-bar
+      title="登录"
+      left-text="返回"
+      left-arrow
+      @click-left="onClickLeft"
+    />
     <div class="login-title">
       Welcome to YueTaoTao
     </div>
@@ -144,6 +150,9 @@ export default {
     },
     goRegister () {
       this.$router.push('/register')
+    },
+    onClickLeft () {
+      window.history.go(-1)
     }
   }
 }

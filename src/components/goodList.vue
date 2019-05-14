@@ -4,7 +4,7 @@
     <div class="hot-box" v-for="(item,index) in shopOptions" :key="index">
       <div class="hot-goods" @click='goodsContent(index)'>
         <a href="javascript:;" class="hot-img">
-          <img v-lazy="item.imgUrl" alt="">
+          <img v-lazy="item.imgurl" alt="">
         </a>
         <a href="javascript:;" class="hot-title">{{item.descript}}</a>
         <p class="shop-price">
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+// import {getGoods} from '@/api/load-data.js'
 export default {
   props: ['clothName'],
   data () {
@@ -62,7 +63,7 @@ export default {
     },
     goodsContent (index) {
       let data = this.shopOptions[index]
-      this.$router.push({path: '/gooddetail', query: data})
+      this.$router.push({path: '/goodsDetail', query: data})
     }
   },
   destroyed () {
@@ -77,7 +78,7 @@ img{
   height:100%;
 }
 .shopContent{
-  /deep/ .hot-box{
+  .hot-box{
     width:45.5vw;
     height: 40vh;
     float:left;
@@ -110,10 +111,10 @@ img{
       margin: 0 auto;
       color: #f00;
       .pay,.pay-people{font-size: 12px;}
-      .pay-people{color: #777777;}
+      .pay-people{color: #777777;margin-left: 15px;}
     }
   }
-  /deep/ .hot-box:nth-child(odd) {
+  .hot-box:nth-child(odd) {
     margin-left: 3vw !important;
   }
 }

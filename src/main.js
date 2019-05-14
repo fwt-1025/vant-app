@@ -9,11 +9,13 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import moment from 'moment'
 import { Lazyload } from 'vant';
+import { ImagePreview } from 'vant';
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 Vue.prototype.$moment = moment
 Vue.use(Vant)
 Vue.use(Lazyload)
+Vue.use(ImagePreview);
 new Vue({
   router,
   store,
