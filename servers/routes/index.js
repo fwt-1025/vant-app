@@ -35,6 +35,8 @@ router.post('/addtocart', cart.saveCart)
 router.get('/getcartgoods', cart.getCartGoods)
 // delete from cart
 router.post('/deletecartgoods', cart.deleteCartGoods)
+// 根据多个id查找购物车中的数据
+router.post('/getFormCartId', cart.getCartFormId)
 // save address
 router.post('/saveaddress', cart.saveAddress)
 router.post('/paylist', cart.payList)

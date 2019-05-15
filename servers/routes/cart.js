@@ -65,15 +65,8 @@ exports.getCartGoods = async (ctx, next) => {
 // 从数据库中删除指定数据
 exports.deleteCartGoods = async (ctx, next) => {
   let goodsId = ctx.request.body.goodsid
-  console.log(goodsId)
-  let data = eval(goodsId)
-  let i = data.findIndex(item => item === null)
-  console.log(i)
-  if (i >= 0) {
-    data.splice(i, 1)
-  }
-  console.log(data)
-  await userModel.deleteCartGoods(data).then(res => {
+  console.log('goodsId', goodsId)
+  await userModel.deleteCartGoods(goodsId).then(res => {
     console.log(res)
     if (res.protocol41) {
       ctx.body = {
@@ -85,6 +78,25 @@ exports.deleteCartGoods = async (ctx, next) => {
       ctx.body = {
         success: false,
         message: '删除失败',
+        data: null
+      }
+    }
+  })
+}
+// 根据多个goodsid 查找数据
+exports.getCartFormId = async (ctx, next) => {
+  let goodsId = eval(ctx.request.body.goodsid)
+  await userModel.getCartFormID(goodsId).then(res => {
+    if (res) {
+      ctx.body = {
+        success: true,
+        message: null,
+        data: res ? res : []
+      }
+    } else {
+      ctx.body = {
+        success: false,
+        message: '处理错误',
         data: null
       }
     }

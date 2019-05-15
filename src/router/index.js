@@ -11,6 +11,7 @@ const router = new Router({
     components: {
       default: () => import('@/page/Index.vue')
     },
+    redirect: '/home',
     children: [{
       path: '/home',
       component: () => import('@/page/Home.vue'),
@@ -88,6 +89,7 @@ const router = new Router({
       auth: '10001'
     }
   }, {
+    name: 'pay',
     path: '/goodsDetail/pay',
     component: () => import('@/components/buyGoods.vue'),
     meta: {

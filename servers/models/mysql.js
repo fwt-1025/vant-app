@@ -143,10 +143,29 @@ let getCartGoods = id => {
   let _sql = id ? `select * from cartgoods where goodsid="${id}"` : `select * from cartgoods`
   return query(_sql)
 }
+// 根据多个goodsid 查找购物车数据库中的数据
+let getCartFormID = val => {
+  let data
+  let data1 = []
+  let _sql
+  val.map(item => {
+    data = `${item}`
+    data1.push(data)
+  })
+  _sql = `select * from cartgoods where goodsid in (${data1.join()})`
+  console.log(_sql)
+  return query(_sql)
+}
 // 从购物车中删除数据
-let deleteCartGoods = id => {
-  let data = eval(id)
-  let _sql = `DELETE FROM cartgoods WHERE goodsid in (${data.join(',')})`
+let deleteCartGoods = val => {
+  let data
+  let data1 = []
+  let _sql
+  val.map(item => {
+    data = `${item}`
+    data1.push(data)
+  })
+  _sql = `DELETE FROM cartgoods WHERE goodsid in (${data1.join()})`
   return query(_sql)
 }
 // 存详细地址
@@ -211,6 +230,7 @@ module.exports = {
   findUser,
   saveCart,
   getCartGoods,
+  getCartFormID,
   deleteCartGoods,
   updateCartGoods,
   saveAddress,

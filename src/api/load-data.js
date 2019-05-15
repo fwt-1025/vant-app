@@ -4,7 +4,8 @@ import Vue from 'vue'
 // console.log(config)
 // var root = process.env.API_ROOT
 // console.log(root)
-var api = 'http://127.0.0.1:3003'
+// var api = 'http://127.0.0.1:3003'
+var api = 'http://10.192.26.23:3003'
 // 买家登录
 export const login = (data) => Vue.axios.post(api + '/login', data).then(res => res.data)
 // 买家注册
@@ -17,6 +18,7 @@ export const loginBusiness = (users) => Vue.axios.post(api + '/loginBusiness', u
 export const saveCart = obj => Vue.axios.post(api + '/addtocart', obj).then(res => res.data)
 // get from cart
 export const getCartGoods = id => Vue.axios.get(api + '/getcartgoods', {params: id}).then(res => res.data)
+export const getCartFormId = id => Vue.axios.post(api + '/getFormCartId', id).then(res => res.data)
 // delete from cart
 export const deleteCartGoods = id => Vue.axios.post(api + '/deletecartgoods', id).then(res => res.data)
 export const saveAddress = val => Vue.axios.post(api + '/saveAddress', val).then(res => res.data)

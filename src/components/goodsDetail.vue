@@ -165,8 +165,12 @@ export default {
     onChange(index) {
       this.index = index;
     },
-    onClickChatBtn () {},
-    onClickCartBtn () {},
+    onClickChatBtn () {
+      // this.
+    },
+    onClickCartBtn () {
+      this.$router.push('/cart')
+    },
     addCart () {
       this.showBase = true
       console.log(this.showBase)

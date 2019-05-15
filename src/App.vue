@@ -30,4 +30,8 @@ html,body,div,p,img,span,ul,li,h1~h6{
   background: none !important;
   color: #fff !important;
 } */
+.van-nav-bar{
+  position: fixed;
+  width: 100%;
+}
 </style>

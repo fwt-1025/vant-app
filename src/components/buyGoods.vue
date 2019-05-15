@@ -13,19 +13,19 @@
         <p style="font-size: 12px; color: orange">收货不便时,可选择免费代收货服务</p>
       </template>
     </van-cell>
-    <van-cell>
+    <van-cell v-for="(item,index) in showGoodsList" :key="index">
       <template slot="title">
         <van-card
-          :num="goodsInfo.goodsnumber"
-          :price="goodsInfo.price"
+          :num="item.goodsnumber"
+          :price="item.price"
           desc="整就中了,家里又不是没条件"  
-          :title="goodsInfo.goodsdescript"
-          :thumb="goodsInfo.imgurl"
+          :title="item.goodsdescript"
+          :thumb="item.imgurl"
         />
       </template>
     </van-cell>
     <van-submit-bar
-      :price="goodsInfo.price * 100"
+      :price="allPrice * 100"
       button-text="提交订单"
       tip="你的收货地址不支持同城送, 我们已为你推荐快递"
       @submit="onSubmit"
@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import {getCartFormId} from '@/api/load-data.js'
 import { PasswordInput, NumberKeyboard } from 'vant';
 import areaList from '@/util/area.js'
 // Vue.use(PasswordInput).use(NumberKeyboard);
@@ -111,7 +112,8 @@ export default {
         tel: '13000000000',
         address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室'
       },
-      goodsInfo: null,
+      showGoodsList: [],
+      goodsInfo: [],
       chosenAddressId: '1',
       list: [
         {
@@ -136,11 +138,29 @@ export default {
         }
       ],
       areaList,
-      searchResult: []
+      searchResult: [],
+      goodsid: [],
+      allPrice: null
     }
   },
   created () {
-    this.goodsInfo = this.$route.query
+    console.log(eval(this.$route.params.id))
+    this.goodsInfo = eval(this.$route.params.id)
+    this.goodsInfo.map(item => {
+      this.goodsid.push(item)
+    })
+    // console.log(this.goodsInfo)
+    let data = {
+      goodsid: this.goodsid
+    }
+    getCartFormId(data).then(res => {
+      if (res.success) {
+        this.showGoodsList = res.data
+        this.showGoodsList.map(item => {
+          this.allPrice += item.price * item.goodsnumber
+        })
+      }
+    })
   },
   methods: {
     onClickLeft () {

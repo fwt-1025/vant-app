@@ -16,6 +16,15 @@ Vue.prototype.$moment = moment
 Vue.use(Vant)
 Vue.use(Lazyload)
 Vue.use(ImagePreview);
+window.addEventListener(
+  "touchmove",
+  function(event) {
+  if (event.scale !== 1) {
+  event.preventDefault();
+  }
+  },
+  { passive: false }
+  );
 new Vue({
   router,
   store,
