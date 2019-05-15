@@ -49,10 +49,12 @@ export default {
       goodsList: [],
       checked: [],
       isLoading: false,
-      // allChecked: false,
       allGoodPrice: 0,
       checkList: []
     }
+  },
+  created () {
+    this.$store.commit('setActiveMenu', 3)
   },
   mounted () {
     this.getGoodsList()

@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import {getCartGoods} from '@/api/load-data.js'
 import {mapState} from 'vuex'
 export default {
   data () {
@@ -30,6 +31,9 @@ export default {
   }),
   created () {
     this.$store.commit('setActiveMenu', 0)
+    getCartGoods().then(res => {
+      this.cartGoods = res.data.length
+    })
   },
   mounted () {
   }
