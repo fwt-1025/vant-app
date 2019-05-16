@@ -2,7 +2,7 @@
   <div>
     <van-nav-bar
       title="购物车"
-      :right-text="clickFlag ? '完成' : '管理'"
+      :right-text="goodsList.length === 0 ? '' : clickFlag ? '完成' : '管理'"
       @click-right="onClickRight"
     />
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
@@ -30,12 +30,18 @@
       :price="allGoodPrice * 100"
       :button-text="clickFlag ? '删除' : '提交订单'"
       @submit="onSubmit"
+      v-if="this.goodsList.length > 0"
     >
       <!-- <van-checkbox @click="allchecked" ref="allCheck" v-model="allChecked">全选</van-checkbox> -->
       <span slot="tip">
         你的收货地址不支持同城送, <span>修改地址</span>
       </span>
     </van-submit-bar>
+    <div class="show" v-if="goodsList.length === 0">
+      <van-icon name="cart" />
+      <p>购物车里啥都没有,在忙也要记得买点东西犒劳自己</p>
+      <van-button type="info" @click="$router.push('/home')">去逛逛</van-button>
+    </div>
   </div>
 </template>
 
@@ -64,7 +70,7 @@ export default {
       getCartGoods().then(res => {
         if (res.success) {
           this.goodsList = res.data
-          this.goodsList.map((item, index) => {
+          this.goodsList.map(() => {
             var f = false
             this.checked.push(f)
             this.checkList.push(null)
@@ -118,7 +124,9 @@ export default {
         deleteCartGoods(data).then(res => {
           if (res.success) {
             this.$toast.success('删除成功')
+            this.clickFlag = false
             this.getGoodsList()
+            this.$store.dispatch('getCartNumber')
           }
         })
       }
@@ -131,19 +139,21 @@ export default {
 .van-submit-bar{
   bottom: 50px;
 }
-.van-nav-bar{
-  position: fixed;
-  width: 100%;
-  top: 0;
-  background: linear-gradient(60deg, #ff6414, #f00);
-  color: #fff;
-}
-.van-nav-bar__title,.van-nav-bar__text{
-  color: #fff;
-}
-.van-nav-bar__text:active{background: none}
+
 .van-pull-refresh{
   margin-top: 46px;
   margin-bottom: 150px;
+}
+.show{
+  width: 60vw;
+  text-align: center;
+  margin: 0 auto;
+  color: #ccc;
+  p{
+    margin-bottom: 20px;
+  }
+  .van-icon{
+    font-size: 50px;
+  }
 }
 </style>

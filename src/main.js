@@ -10,6 +10,10 @@ import VueAxios from 'vue-axios'
 import moment from 'moment'
 import { Lazyload } from 'vant';
 import { ImagePreview } from 'vant';
+import { Uploader } from 'vant';
+
+import './styles/common.scss'
+Vue.use(Uploader);
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 Vue.prototype.$moment = moment

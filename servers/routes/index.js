@@ -29,6 +29,10 @@ var storage = multer.diskStorage({
 router.post('/login', account.login)
 // 注册
 router.post('/register', account.register)
+// 查询用户
+router.post('/findUser', account.findBuyerUser)
+// 上传头像
+router.post('/uploadHead', account.uploadBuyerHead)
 // add to cart
 router.post('/addtocart', cart.saveCart)
 // get from cart

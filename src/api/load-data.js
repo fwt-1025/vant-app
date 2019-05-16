@@ -14,6 +14,11 @@ export const registerAccount = (users) => Vue.axios.post(api + '/register', user
 export const registerBusiness = (users) => Vue.axios.post(api + '/registerBusiness', users).then(res =>res.data)
 // 商家登录
 export const loginBusiness = (users) => Vue.axios.post(api + '/loginBusiness', users).then(res =>res.data)
+// 查找用户
+export const findUser = (users) => Vue.axios.post(api + '/findUser', users).then(res => res.data)
+// 上传头像
+export const uploadUserHead = d => Vue.axios.post(api + '/uploadHead', d).then(res => res.data)
+
 // add to cart
 export const saveCart = obj => Vue.axios.post(api + '/addtocart', obj).then(res => res.data)
 // get from cart
@@ -24,7 +29,7 @@ export const deleteCartGoods = id => Vue.axios.post(api + '/deletecartgoods', id
 export const saveAddress = val => Vue.axios.post(api + '/saveAddress', val).then(res => res.data)
 export const payList = val => Vue.axios.post(api + '/paylist', val).then(res => res.data)
 export const getpayList = val => Vue.axios.get(api + '/getPayList', val).then(res => res.data)
-export const getSellerGoods = _ => Vue.axios.get(api + '/getGoods').then(res => res.data)
+export const getSellerGoods = () => Vue.axios.get(api + '/getGoods').then(res => res.data)
 
 export const getGoods = (obj) => Vue.axios.post(api + '/getVipGoods', obj).then(res => res.data)
 /*

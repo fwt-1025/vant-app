@@ -94,7 +94,7 @@ export default {
   created () {
     this.getCartNum()
     this.goodsInfo = this.$route.query
-    console.log(this.goodsInfo)
+    // window.console.log(this.goodsInfo)
     this.goods = {
       // 商品标题
       title: this.goodsInfo.descript,
@@ -173,7 +173,7 @@ export default {
     },
     addCart () {
       this.showBase = true
-      console.log(this.showBase)
+      // window.console.log(this.showBase)
     },
     onClickToBuy () {
       this.showBase = true
@@ -186,7 +186,10 @@ export default {
         goodsnumber: info.selectedNum,
         imgurl: this.goodsInfo.imgurl
       }
-      this.$router.push({path: '/goodsDetail/pay', query: data})
+      let d = []
+      d.push(data)
+      this.$store.commit('setGoodsShow', d)
+      this.$router.push({path: '/goodsDetail/pay'})
     },
     onAddCartClicked (info) {
       let data = {
@@ -212,7 +215,7 @@ export default {
     background: #fff;
     padding:3vw;
     .good-price{
-      color: #f00;
+      color: #f44;
       font-size: 26px;
     }
     .good-descript{

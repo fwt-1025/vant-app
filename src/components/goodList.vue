@@ -4,7 +4,7 @@
     <div class="hot-box" v-for="(item,index) in shopOptions" :key="index">
       <div class="hot-goods" @click='goodsContent(index)'>
         <a href="javascript:;" class="hot-img">
-          <img v-lazy="item.imgurl" alt="">
+          <img loading='https://img.yzcdn.cn/1.jpg' v-lazy="item.imgurl" alt="">
         </a>
         <a href="javascript:;" class="hot-title">{{item.descript}}</a>
         <p class="shop-price">
@@ -31,7 +31,7 @@ export default {
   },
   watch: {
     clothName: {
-      handler (o, n) {
+      handler (o) {
         if (o) {
           this.shopData = []
           this.cloName = o
@@ -93,10 +93,11 @@ img{
       width: 100%;
       height:70%;
       border-radius: 5px 5px 0 0;
-      background: #f00;
+      background: #f44;
     }
     .hot-title{
       display: block;
+      color: #000;
       width: 95%;
       height: 20px;
       margin: 5px auto;
@@ -109,7 +110,7 @@ img{
       width: 95%;
       height: auto;
       margin: 0 auto;
-      color: #f00;
+      color: #f44;
       .pay,.pay-people{font-size: 12px;}
       .pay-people{color: #777777;margin-left: 15px;}
     }

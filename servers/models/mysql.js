@@ -38,6 +38,7 @@ let buyerUser = `
     auth VARCHAR(100) NOT NULL,
     phone VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
+    account_img LONGTEXT NOT NULL,
     createTime TIMESTAMP(4) NOT NULL);`
 
 let cartgoods = `
@@ -75,6 +76,7 @@ let businessUser = `
     auth VARCHAR(100) NOT NULL,
     phone VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
+    account_img LONGTEXT NOT NULL,
     createTime VARCHAR(100) NOT NULL);`
 
 let upload = `
@@ -109,14 +111,18 @@ createTable(businessUser) // 卖家
 createTable(chat) // 聊天人
 // 注册买家用户
 let insertUser = (value) => {
-  console.log('value', value)
-  let _sql = `insert into buyerUser set userName=?,passWord=?,auth=?,phone=?,email=?,createTime=?;`
+  console.log(value)
+  let _sql = `insert into buyerUser set userName=?,passWord=?,auth=?,phone=?,email=?,account_img=?,createTime=?;`
   return query(_sql, value)
 }
-
+// 上传买家头像
+let uploadBuyerHead = (val) => {
+  console.log('val', val.username)
+  let _sql = `update buyerUser set account_img=? where userName="${val.username}"`
+  return query(_sql, val.data_img)
+}
 // 买家用户登录
 let login = (name) => {
-  console.log(name)
   let _sql = `select * from buyerUser where userName="${name}"`
   return query(_sql)
 }
@@ -130,7 +136,6 @@ let findUser = name => {
 // 存购物车
 let saveCart = obj => {
   let _sql = `insert into cartgoods set goodsid=?,imgurl=?,price=?,goodsnumber=?,goodsdescript=?;`
-  console.log(_sql)
   return query(_sql, obj)
 }
 // 更新购物车中的数据(此操作仅在商品相同的情况下执行)
@@ -153,7 +158,6 @@ let getCartFormID = val => {
     data1.push(data)
   })
   _sql = `select * from cartgoods where goodsid in (${data1.join()})`
-  console.log(_sql)
   return query(_sql)
 }
 // 从购物车中删除数据
@@ -184,19 +188,22 @@ let payList = value => {
   _sql = `insert into paylist(goodsid,imgurl,price,goodsnumber,goodsdescript) VALUES ${data1.join()};`
   return query(_sql)
 }
-let getPayList = value => {
+let getPayList = () => {
   let _sql = `select * from paylist`
   return query(_sql)
 }
 // 卖家注册
 let insertSeller = (value) => {
-  let _sql = `insert into businessUser set userName=?,passWord=?,auth=?,phone=?,email=?,createTime=?;`
+  let _sql = `insert into businessUser set userName=?,passWord=?,auth=?,phone=?,email=?,account_img=?,createTime=?;`
   return query(_sql, value)
 }
-
+// 上传卖家家头像
+let uploadSellerHead = (val) => {
+  let _sql = `update businessUser set account_img where userName="${val.username}"`
+  return query(_sql, val.data_img)
+}
 // 卖家登录
 let loginSeller = (name) => {
-  console.log('name', name)
   let _sql = `select * from businessUser where userName="${name}"`
   return query(_sql)
 }
@@ -220,12 +227,12 @@ let insertChat = value => {
   return query(_sql, value)
 }
 let findChat = value => {
-  console.log('val', value)
   let _sql = value ? `select * from chat where userName="${value}"` : `select * from chat`
   return query(_sql)
 }
 module.exports = {
   insertUser,
+  uploadBuyerHead,
   login,
   findUser,
   saveCart,
@@ -238,6 +245,7 @@ module.exports = {
   getPayList,
   uploadImg,
   insertSeller,
+  uploadSellerHead,
   loginSeller,
   findSeller,
   findSellerGoods,

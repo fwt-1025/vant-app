@@ -2,8 +2,6 @@
   <div class="loginBox">
     <van-nav-bar
       title="登录"
-      left-text="返回"
-      left-arrow
       @click-left="onClickLeft"
     />
     <div class="login-title">
@@ -53,11 +51,11 @@
         :error='smsFlag'
         placeholder="请输入验证码"
       >
-        <van-button style="width: auto" slot="button" size="small" type="primary" @click="changeAuthCode">{{authCode}}</van-button>
+        <van-button style="width: auto" slot="button" size="small" type="info" @click="changeAuthCode">{{authCode}}</van-button>
       </van-field>
     </van-cell-group>
     <div style="width:100%;text-align:center;">
-      <van-button type="primary" @click="loginIn">登录</van-button>
+      <van-button type="info" @click="loginIn">登录</van-button>
       <van-button type="default" @click="goRegister">前往注册</van-button>
     </div>
   </div>
@@ -108,8 +106,9 @@ export default {
           if (this.userForm.radio === '10001') {
             login(this.userForm).then(res => {
               if (res.success) {
-                console.log(res.user)
-                this.$store.commit('setBuyer', res.user)
+                // console.log(res.user)
+                // this.$store.commit('setBuyer', res.user)
+                localStorage.setItem('user', JSON.stringify(res.user))
                 this.$toast({
                   type: 'success',
                   mask: true,
@@ -127,7 +126,8 @@ export default {
           } else {
             loginBusiness(this.userForm).then(res => {
               if (res.success) {
-                this.$store.commit('setBussiness', res.user)
+                // this.$store.commit('setBussiness', res.user)
+                localStorage.setItem('user', JSON.stringify(res.user))
                 this.$toast({
                   type: 'success',
                   mask: true,
@@ -160,7 +160,6 @@ export default {
 
 <style lang="scss" scoped>
 .loginBox{
-  padding: 0 10px;
   .login-title{
     font-size: 26px;
     font-weight: 500;
@@ -168,7 +167,9 @@ export default {
     padding: 50px 0;
   }
 }
-
+.van-cell-group{
+  padding: 0 10px;
+}
 .van-radio{
   display: inline-block;
   margin: 10px;

@@ -77,6 +77,7 @@ export default {
         email: null,
         radio: '10001',
         sms: null,
+        account_img: '',
         createTime: null
       },
       usernameFlag: false,
@@ -88,12 +89,12 @@ export default {
   methods: {
     register () {
       var that = this
+      // this.account_img
       let createTime = this.$moment().format('YYYY-MM-DD HH:mm:ss')
       this.usernameFlag = this.userForm.username ? false : true
       this.pwdFlag = this.userForm.password ? false : true
       this.repwdFlag = this.userForm.repwd ? false : true
       this.userForm.createTime = createTime
-      console.log()
       if (this.usernameFlag || this.repwdFlag || this.pwdFlag) {
         return false
       } else {

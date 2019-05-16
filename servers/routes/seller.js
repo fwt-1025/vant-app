@@ -33,7 +33,6 @@ exports.loginSeller = async (ctx, next) => {
 }
 
 exports.registerSeller = async (ctx, next) => {
-  console.log(ctx.request.body)
   let users = ctx.request.body
   await userModel.findSeller(users.username).then(async res => {
     // console.log(res)
@@ -50,7 +49,7 @@ exports.registerSeller = async (ctx, next) => {
     } else {
       users.phone = users.phone ? users.phone : ''
       users.email = users.email ? users.email : ''
-      await userModel.insertSeller([users.username, users.password, users.radio, users.phone, users.email, users.createTime]).then(res => {
+      await userModel.insertSeller([users.username, users.password, users.radio, users.phone, users.email,users.account_img, users.createTime]).then(res => {
         if (res.insertId) {
           ctx.body = {
             success: true,

@@ -96,13 +96,34 @@ const router = new Router({
       requireLogin: true,
       auth: '10001'
     }
+  }, {
+    path: '/common',
+    component: () => import('@/components/common')
+  }, {
+    name: 'receiveAddress',
+    path: '/receiveAddress',
+    component: () => import('@/components/ReceiveAddress'),
+    meta: {
+      requireLogin: true,
+      auth: '10001'
+    }
+  }, {
+    name: 'addAddress',
+    path: '/addAddress',
+    component: () => import('@/components/AddAddress'),
+    meta: {
+      requireLogin: true,
+      auth: '10001'
+    }
   }]
 })
 router.beforeEach((to, from, next) => {
+  let d = JSON.parse(localStorage.getItem('user'))
   if(to.meta.requireLogin) {
     // eslint-disable-next-line no-console
-    console.log(store.state.buyer, store.state.business.userName)
-    if (store.state.buyer.userName || store.state.business.userName) {
+    // let d = JSON.parse(localStorage.getItem('user'))
+    // console.log(store.state.buyer.username, store.state.business.username)
+    if (d.username) {
       next()
     } else {
       router.push('/login')

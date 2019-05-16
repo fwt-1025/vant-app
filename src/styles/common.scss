@@ -1,0 +1,15 @@
+.van-nav-bar{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  background: linear-gradient(60deg, #55ddff, rgb(82, 162, 253));
+  color: #fff;
+}
+.van-nav-bar__title,.van-nav-bar__text{
+  color: #fff;
+}
+.van-nav-bar__text:active{background: none}
+.van-button--info{
+  background: linear-gradient(60deg, #55ddff, rgb(82, 162, 253));
+  border: 1px solid #55ddff
+}

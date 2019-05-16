@@ -6,7 +6,7 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <van-cell icon="location-o" is-link @click='onCellClick'>
+    <van-cell style="margin-top: 60px" icon="location-o" is-link @click='onCellClick'>
       <template slot="title">
         <p class="custom-text">{{user.name + ' ' + user.tel}}</p>
         <p style="width: 80%">{{user.address}}</p>
@@ -30,25 +30,7 @@
       tip="你的收货地址不支持同城送, 我们已为你推荐快递"
       @submit="onSubmit"
     />
-    <van-popup v-model="show" position="bottom" :overlay="true" lazy-render>
-      <van-nav-bar
-        title="我的收货地址"
-        left-text="返回"
-        right-text="添加新地址"
-        left-arrow
-        @click-left="show = false"
-        @click-right="onAdd"
-      />
-      <van-address-list
-        v-model="chosenAddressId"
-        :list="list"
-        :disabled-list="disabledList"
-        disabled-text="以下地址超出配送范围"
-        @add="onAdd"
-        @edit="onEdit"
-        @select='onSelect'
-      />
-    </van-popup>
+    
     <van-popup v-model="showPop" position="bottom" :overlay="true" lazy-render>
       <van-nav-bar
         title="输入密码"
@@ -73,31 +55,14 @@
         @close='onClose'
       />
     </van-popup>
-    <van-popup v-model="addshowPop" position="bottom" :overlay="true" lazy-render>
-      <van-nav-bar
-        title="添加收货地址"
-        left-text="返回"
-        left-arrow
-        @click-left="addshowPop=false;show=true"
-      />
-      <van-address-edit
-        :area-list="areaList"
-        show-postal
-        show-delete
-        show-set-default
-        show-search-result
-        :search-result="searchResult"
-        @save="onSave"
-        @delete="onDelete"
-        @change-detail="onChangeDetail"
-      />
-    </van-popup>
+    
   </div>
 </template>
 
 <script>
 import {getCartFormId} from '@/api/load-data.js'
-import { PasswordInput, NumberKeyboard } from 'vant';
+// import { PasswordInput, NumberKeyboard } from 'vant';
+import {mapState} from 'vuex'
 import areaList from '@/util/area.js'
 // Vue.use(PasswordInput).use(NumberKeyboard);
 export default {
@@ -114,104 +79,59 @@ export default {
       },
       showGoodsList: [],
       goodsInfo: [],
-      chosenAddressId: '1',
-      list: [
-        {
-          id: '1',
-          name: '张三',
-          tel: '13000000000',
-          address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室'
-        },
-        {
-          id: '2',
-          name: '李四',
-          tel: '1310000000',
-          address: '浙江省杭州市拱墅区莫干山路 50 号'
-        }
-      ],
-      disabledList: [
-        {
-          id: '3',
-          name: '王五',
-          tel: '1320000000',
-          address: '浙江省杭州市滨江区江南大道 15 号'
-        }
-      ],
-      areaList,
-      searchResult: [],
       goodsid: [],
       allPrice: null
     }
   },
+  computed: mapState({
+    goodsShow: state => state.goosShow
+  }),
   created () {
-    console.log(eval(this.$route.params.id))
-    this.goodsInfo = eval(this.$route.params.id)
-    this.goodsInfo.map(item => {
-      this.goodsid.push(item)
-    })
-    // console.log(this.goodsInfo)
-    let data = {
-      goodsid: this.goodsid
-    }
-    getCartFormId(data).then(res => {
-      if (res.success) {
-        this.showGoodsList = res.data
-        this.showGoodsList.map(item => {
-          this.allPrice += item.price * item.goodsnumber
-        })
+    window.console.log(this.goodsShow)
+    this.goodsInfo = this.goodsShow.length > 0 ? this.goodsShow : eval(this.$route.params.id)
+    if (!this.goodsShow.length > 0) {
+      this.goodsInfo.map(item => {
+        this.goodsid.push(item)
+      })
+      // console.log(this.goodsInfo)
+      let data = {
+        goodsid: this.goodsid
       }
-    })
+      getCartFormId(data).then(res => {
+        if (res.success) {
+          this.showGoodsList = res.data
+          this.showGoodsList.map(item => {
+            this.allPrice += item.price * item.goodsnumber
+          })
+        }
+      })
+    } else {
+      this.showGoodsList = this.goodsInfo
+    }
+  },
+  mounted () {
+    window.console.log(this.goodsShow)
   },
   methods: {
+    /*eslint no-dupe-keys: "error"*/
     onClickLeft () {
       window.history.go(-1)
     },
     onCellClick () {
-      this.show = true
-    },
-    // 选择地址
-    onAdd() {
-      // this.$toast('新增地址');
-      this.addshowPop = true
-    },
-    onEdit(item, index) {
-      this.$toast('编辑地址:' + index);
-    },
-    onSelect (item, index) {
-      this.user.name = item.name
-      this.user.address = item.address
-      this.user.tel = item.tel
-      this.show = false
+      this.$router.push('/receiveAddress')
     },
     onSubmit () {
       this.showPop = true
     },
     // 密码输入
     onInput (key) {
-      this.value = (this.value + key).slice(0, 6);
+      this.value = (this.value + key).slice(0, 6)
     },
     onDelete () {
-      this.value = this.value.slice(0, this.value.length - 1);
+      this.value = this.value.slice(0, this.value.length - 1)
     },
     onClose () {
       this.showPop = false
-    },
-    // 地址编辑
-    onSave() {
-      this.$toast('save');
-    },
-    onDelete() {
-      this.$toast('delete');
-    },
-    onChangeDetail(val) {
-      if (val) {
-        this.searchResult = [{
-          name: '河北北方学院',
-          address: '张家口市'
-        }];
-      } else {
-        this.searchResult = [];
-      }
     }
   }
 }
@@ -229,6 +149,6 @@ export default {
   height: 100%;
 }
 .van-password-input{
-  top: 50vh;
+  top: 46px;
 }
 </style>
