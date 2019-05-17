@@ -14,8 +14,10 @@ export const registerAccount = (users) => Vue.axios.post(api + '/register', user
 export const registerBusiness = (users) => Vue.axios.post(api + '/registerBusiness', users).then(res =>res.data)
 // 商家登录
 export const loginBusiness = (users) => Vue.axios.post(api + '/loginBusiness', users).then(res =>res.data)
-// 查找用户
+// 查找买家用户
 export const findUser = (users) => Vue.axios.post(api + '/findUser', users).then(res => res.data)
+// 查找商家
+export const findSellerUser = (users) => Vue.axios.post(api + '/findSellerUser', users).then(res => res.data)
 // 上传头像
 export const uploadUserHead = d => Vue.axios.post(api + '/uploadHead', d).then(res => res.data)
 
@@ -26,7 +28,8 @@ export const getCartGoods = id => Vue.axios.get(api + '/getcartgoods', {params: 
 export const getCartFormId = id => Vue.axios.post(api + '/getFormCartId', id).then(res => res.data)
 // delete from cart
 export const deleteCartGoods = id => Vue.axios.post(api + '/deletecartgoods', id).then(res => res.data)
-export const saveAddress = val => Vue.axios.post(api + '/saveAddress', val).then(res => res.data)
+export const saveAddress = val => Vue.axios.post(api + '/saveaddress', val).then(res => res.data)
+export const getAddress = val => Vue.axios.get(api + '/getaddress', {params: val}).then(res => res.data)
 export const payList = val => Vue.axios.post(api + '/paylist', val).then(res => res.data)
 export const getpayList = val => Vue.axios.get(api + '/getPayList', val).then(res => res.data)
 export const getSellerGoods = () => Vue.axios.get(api + '/getGoods').then(res => res.data)

@@ -16,7 +16,8 @@ const store = new Vuex.Store({
       auth: ''
     },
     cartNumber: 0,
-    goosShow: []
+    goosShow: [],
+    goodsId: []
   },
   mutations: {
     setActiveMenu (state, val) {
@@ -32,8 +33,10 @@ const store = new Vuex.Store({
       state.cartNumber = val
     },
     setGoodsShow (state, val) {
-      console.log('val', val)
       state.goosShow = val
+    },
+    setgoodsId (state, val) {
+      state.goodsId = val
     }
   },
   actions: {

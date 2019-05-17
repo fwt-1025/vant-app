@@ -33,7 +33,6 @@ exports.login = async (ctx, next) => {
 exports.register = async (ctx, next) => {
   let users = ctx.request.body
   await userModel.findUser(users.username).then(async res => {
-    // console.log(res)
     if (res.length) {
       try {
         ctx.body = {
@@ -42,7 +41,7 @@ exports.register = async (ctx, next) => {
         }
         throw new Error('用户名已存在')
       } catch (error) {
-        window.console.log(error)
+        console.log(error)
       }
     } else {
       users.phone = users.phone ? users.phone : ''
@@ -51,6 +50,11 @@ exports.register = async (ctx, next) => {
         if (res.insertId) {
           ctx.body = {
             success: true,
+            user: {
+              username: users.username,
+              id: res.insertId,
+              auth: users.radio
+            },
             message: '注册成功'
           }
         }
@@ -60,7 +64,6 @@ exports.register = async (ctx, next) => {
 }
 exports.findBuyerUser = async (ctx, next) => {
   var users = ctx.request.body
-  console.log(users)
   await userModel.findUser(users.username).then(async res => {
     // console.log(res)
     if (res.length) {

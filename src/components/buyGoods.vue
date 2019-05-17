@@ -61,22 +61,19 @@
 
 <script>
 import {getCartFormId} from '@/api/load-data.js'
-// import { PasswordInput, NumberKeyboard } from 'vant';
 import {mapState} from 'vuex'
-import areaList from '@/util/area.js'
-// Vue.use(PasswordInput).use(NumberKeyboard);
 export default {
   data () {
     return {
       value: '',
       show: false,
       showPop: false,
-      addshowPop: false,
-      user: {
+      dataUser: {
         name: '张三',
         tel: '13000000000',
         address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室'
       },
+      user: {},
       showGoodsList: [],
       goodsInfo: [],
       goodsid: [],
@@ -84,11 +81,13 @@ export default {
     }
   },
   computed: mapState({
-    goodsShow: state => state.goosShow
+    goodsShow: state => state.goosShow,
+    goodsId: state => state.goodsId
   }),
   created () {
-    window.console.log(this.goodsShow)
-    this.goodsInfo = this.goodsShow.length > 0 ? this.goodsShow : eval(this.$route.params.id)
+    window.console.log(eval(this.$route.params.id))
+    this.user = this.$route.params.d ? this.$route.params.d : this.dataUser
+    this.goodsInfo = this.goodsShow.length > 0 ? this.goodsShow : this.goodsId
     if (!this.goodsShow.length > 0) {
       this.goodsInfo.map(item => {
         this.goodsid.push(item)

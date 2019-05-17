@@ -32,3 +32,36 @@ exports.uploadFile = async (ctx, next) => {
     }
   })
 }
+// 上传头像
+exports.uploadBuyerHead = async(ctx, next) => {
+  let data = ctx.request.body
+  console.log('data', data.auth)
+  if (data.auth === '10001') {
+    await uploadMysql.findUser(data.username).then(async res=> {
+      if (res.length > 0) {
+        await uploadMysql.uploadBuyerHead(data).then(r => {
+          if (r) {
+            ctx.body = {
+              success: true,
+              message: '上传成功!'
+            }
+          }
+        })
+      }
+    })
+  } else {
+    await uploadMysql.findSeller(data.username).then(async res=> {
+      console.log('res', res)
+      if (res.length > 0) {
+        await uploadMysql.uploadSellerHead(data).then(r => {
+          if (r) {
+            ctx.body = {
+              success: true,
+              message: '上传成功!'
+            }
+          }
+        })
+      }
+    })
+  }
+}

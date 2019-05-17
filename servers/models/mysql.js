@@ -54,9 +54,15 @@ let cartgoods = `
 let address = `
   create table if not exists address(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    areacode VARCHAR(100) NOT NULL,
-    areaname VARCHAR(100) NOT NULL,
-    phone VARCHAR(100) NOT NULL,
+    areaCode VARCHAR(100) NOT NULL,
+    addressDetail VARCHAR(100) NOT NULL,
+    tel VARCHAR(100) NOT NULL,
+    isDefault VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    postalCode VARCHAR(100) NOT NULL,
+    province VARCHAR(100) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    county VARCHAR(100) NOT NULL,
     userid INT NOT NULL
   );`
 let paylist = `
@@ -174,8 +180,12 @@ let deleteCartGoods = val => {
 }
 // 存详细地址
 let saveAddress = value => {
-  let _sql = `insert into address set areacode=?,areaname=?,phone=?,userid=?;`
+  let _sql = `insert into address set areaCode=?,addressDetail=?,tel=?,isDefault=?,name=?,postalCode=?,province=?,city=?,county=?,userid=?;`
   return query(_sql, value)
+}
+let getAddress = value => {
+  let _sql = `SELECT * FROM address WHERE userid = ${value};`
+  return query(_sql)
 }
 let payList = value => {
   let data
@@ -199,7 +209,7 @@ let insertSeller = (value) => {
 }
 // 上传卖家家头像
 let uploadSellerHead = (val) => {
-  let _sql = `update businessUser set account_img where userName="${val.username}"`
+  let _sql = `update businessUser set account_img=? where userName="${val.username}";`
   return query(_sql, val.data_img)
 }
 // 卖家登录
@@ -210,7 +220,7 @@ let loginSeller = (name) => {
 
 // 查找卖家用户
 let findSeller = name => {
-  let _sql = `select * from businessUser where userName="${name}"`
+  let _sql = `SELECT * FROM businessuser WHERE userName = '${name}';`
   return query(_sql)
 }
 // 卖家上传图片
@@ -241,6 +251,7 @@ module.exports = {
   deleteCartGoods,
   updateCartGoods,
   saveAddress,
+  getAddress,
   payList,
   getPayList,
   uploadImg,

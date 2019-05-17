@@ -65,7 +65,6 @@
 
 <script>
 import {registerAccount, registerBusiness} from '@/api/load-data.js'
-import { setPriority } from 'os';
 export default {
   data () {
     return {
@@ -102,7 +101,8 @@ export default {
           if (this.userForm.radio === '10001') {
             registerAccount(this.userForm).then(res => {
               if (res.success) {
-                this.$store.commit('setBuyer', res.user)
+                // this.$store.commit('setBuyer', res.user)
+                localStorage.setItem('user', JSON.stringify(res.user))
                 this.$toast({
                   type: 'success',
                   mask: true,
@@ -120,7 +120,8 @@ export default {
           } else {
             registerBusiness(this.userForm).then(res => {
               if (res.success) {
-                this.$store.commit('setBussiness', res.user)
+                // this.$store.commit('setBussiness', res.user)
+                localStorage.setItem('user', JSON.stringify(res.user))
                 this.$toast({
                   type: 'success',
                   mask: true,
@@ -136,6 +137,8 @@ export default {
               }
             })
           }
+        } else {
+          this.$toast('两次密码输入不一致')
         }
       }
     },

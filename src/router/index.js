@@ -11,7 +11,7 @@ const router = new Router({
     components: {
       default: () => import('@/page/Index.vue')
     },
-    redirect: '/home',
+    redirect: '/login',
     children: [{
       path: '/home',
       component: () => import('@/page/Home.vue'),
@@ -115,15 +115,20 @@ const router = new Router({
       requireLogin: true,
       auth: '10001'
     }
+  }, {
+    name: 'settings',
+    path: '/settings',
+    component: () => import('@/page/settings')
   }]
 })
 router.beforeEach((to, from, next) => {
   let d = JSON.parse(localStorage.getItem('user'))
   if(to.meta.requireLogin) {
+    console.log(d)
     // eslint-disable-next-line no-console
     // let d = JSON.parse(localStorage.getItem('user'))
     // console.log(store.state.buyer.username, store.state.business.username)
-    if (d.username) {
+    if (d.username || d.userName) {
       next()
     } else {
       router.push('/login')

@@ -34,8 +34,8 @@ export default {
   created () {
     console.log(this.buyer)
     this.$store.commit('setActiveMenu', 0)
-    this.$store.dispatch('getCartNumber')
     this.buyer = JSON.parse(localStorage.getItem('user')).auth
+    this.buyer === '10001' ? this.$store.dispatch('getCartNumber') : ''
     // getCartGoods().then(res => {
     //   this.cartGoods = res.data.length
     // })

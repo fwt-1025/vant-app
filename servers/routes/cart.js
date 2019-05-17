@@ -3,7 +3,6 @@ const userModel = require('../models/mysql')
 
 exports.saveCart = async (ctx, next) => {
   let goods = ctx.request.body
-  console.log(goods)
   let data = [goods.goodsid, goods.imgurl, goods.price, goods.goodsnumber, goods.goodsdescript]
   // 存购物车数据时,要考虑是否存了同一件商品,所以要先查找数据库中是否已存在相同的商品
   await userModel.getCartGoods(goods.goodsid).then(async res => {
@@ -102,25 +101,7 @@ exports.getCartFormId = async (ctx, next) => {
     }
   })
 }
-// 保存地址数据
-exports.saveAddress = async (ctx, next) => {
-  let obj = ctx.request.body
-  await userModel.saveAddress([obj.areacode, obj.areaname, obj.phone, obj.userid]).then(res => {
-    if (res.protocol41) {
-      ctx.body = {
-        success: true,
-        message: '保存成功',
-        data: null
-      }
-    } else {
-      ctx.body = {
-        success: false,
-        message: '保存失败',
-        data: null
-      }
-    }
-  })
-}
+
 //结算
 exports.payList = async (ctx, next) => {
   let goods = eval(ctx.request.body)

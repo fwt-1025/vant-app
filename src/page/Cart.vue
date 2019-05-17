@@ -84,9 +84,11 @@ export default {
       this.clickFlag = !this.clickFlag
     },
     toggleChange (index, info) {
-      if (this.checkList.indexOf(info.goodsid) < 0) {
-        this.checkList[index] = Number(info.goodsid)
-        this.getAllPrice(true, info.price, info.goodsnumber)
+      if (this.$refs.checkboxes[index].checked) {
+        if (this.checkList.indexOf(info.goodsid) < 0) {
+          this.checkList[index] = Number(info.goodsid)
+          this.getAllPrice(true, info.price, info.goodsnumber)
+        }
       } else {
         this.checkList.splice(this.checkList.indexOf(Number(info.goodsid)), 1, null)
         this.getAllPrice(false, info.price, info.goodsnumber)
@@ -112,12 +114,14 @@ export default {
       this.getAllPrice(false, info.price, 1)
     },
     onSubmit () {
+      if (this.checkList.length === 1 && this.checkList[0] === null) { 
+        this.$toast.fail('请选择一个商品')
+        return false
+      }
       if (!this.clickFlag) {
-        this.$router.push({name: 'pay', params: {id: JSON.stringify(this.checkList)}})
+        this.$store.commit('setgoodsId', this.checkList)
+        this.$router.push({name: 'pay'})
       } else {
-        // this.checkList.map(item => {
-          
-        // })
         let data = {
           goodsid: this.checkList
         }

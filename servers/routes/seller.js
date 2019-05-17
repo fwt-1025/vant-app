@@ -2,11 +2,9 @@ const userModel = require('../models/mysql.js')
 // const router = require('koa-router')()
 // 卖家
 exports.loginSeller = async (ctx, next) => {
-  console.log(ctx.request.body)
   let userName = ctx.request.body.username
   await userModel.loginSeller(userName).then(res => {
     if (res.length) {
-      console.log(res[0], ctx.request.body.password)
       if (res[0].passWord === ctx.request.body.password) {
         ctx.body = {
           success: true,
@@ -53,6 +51,11 @@ exports.registerSeller = async (ctx, next) => {
         if (res.insertId) {
           ctx.body = {
             success: true,
+            user: {
+              username: users.username,
+              id: res.insertId,
+              auth: users.radio
+            },
             message: '注册成功'
           }
         }
@@ -67,6 +70,23 @@ exports.sellerGoods = async (ctx, next) => {
         success: true,
         message: '',
         data: res
+      }
+    }
+  })
+}
+
+exports.findSellerUser = async (ctx, next) => {
+  var users = ctx.request.body
+  await userModel.findSeller(users.username).then(async res => {
+    // console.log(res)
+    if (res.length) {
+      try {
+        ctx.body = {
+          success: true,
+          data: res[0]
+        }
+      } catch (error) {
+        window.console.log(error)
       }
     }
   })

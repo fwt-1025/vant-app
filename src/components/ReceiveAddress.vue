@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-popup v-model="show" position="bottom" :overlay="true" lazy-render>
+    <van-popup v-model="show" position="right" :overlay="true" lazy-render>
       <van-nav-bar
         title="我的收货地址"
         left-text="返回"
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import {getAddress} from '@/api/load-data.js'
+import {localUser} from '@/util/local.js'
 export default {
   data () {
     return {
@@ -54,9 +56,26 @@ export default {
   },
   mounted () {
     this.show = true
+    this.addressGet()
   },
   methods: {
-     // 选择地址
+    // 获取收货地址
+    addressGet () {
+      let data = {
+        userid: localUser().id
+      }
+      getAddress(data).then(res => {
+        if (res.success) {
+          this.list = res.data
+          this.list.map(item => {
+            item.address = item.province + item.city + item.county + item.addressDetail
+          })
+        } else {
+          this.$toast.fail('网络开小差了')
+        }
+      })
+    },
+    // 选择地址
     onAdd() {
       // this.$toast('新增地址');
       this.$router.push('/addAddress')
@@ -65,6 +84,13 @@ export default {
       this.$toast('编辑地址:' + index);
     },
     onSelect (item) {
+      console.log(item)
+      let data = {
+        name: item.name,
+        address: item.address,
+        tel: item.tel
+      }
+      this.$router.push({name: 'pay', params: {d: data}})
       // this.user.name = item.name
       // this.user.address = item.address
       // this.user.tel = item.tel
@@ -78,7 +104,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.van-popup--bottom{
+.van-popup{
+  width: 100%;
+  height: 100%;
   height: 100vh;
   overflow: hidden
 }

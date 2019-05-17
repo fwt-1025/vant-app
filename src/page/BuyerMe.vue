@@ -16,8 +16,8 @@
     <van-cell icon='passed' title="支付" is-link to="common" />
     <van-cell icon='star-o' title="收藏" is-link to="common" />
     <van-cell icon='balance-pay' title="订单" is-link to="common" />
-    <van-cell icon='location-o' title="收货地址" is-link to="common" />
-    <van-cell icon='setting-o' title="设置" is-link to="common" />
+    <van-cell icon='location-o' title="收货地址" is-link to="/receiveAddress" />
+    <van-cell icon='setting-o' title="设置" is-link to="settings" />
   </div>
 </template>
 
@@ -45,7 +45,8 @@ export default {
     onClickRight () {},
     getBuyerImg () {
       let d = {
-        username: localUser().username
+        username: localUser().username,
+        auth: localUser().auth
       }
       findUser(d).then(res => {
         if (res.success) {

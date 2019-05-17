@@ -8,6 +8,7 @@ const Upload = multer()
 const proxy = require('./proxy')
 const chat = require('./chat')
 const seller = require('./seller')
+const address = require('./address')
 
 // 文件上传
 // 配置
@@ -32,7 +33,7 @@ router.post('/register', account.register)
 // 查询用户
 router.post('/findUser', account.findBuyerUser)
 // 上传头像
-router.post('/uploadHead', account.uploadBuyerHead)
+router.post('/uploadHead', uploader.uploadBuyerHead)
 // add to cart
 router.post('/addtocart', cart.saveCart)
 // get from cart
@@ -42,7 +43,9 @@ router.post('/deletecartgoods', cart.deleteCartGoods)
 // 根据多个id查找购物车中的数据
 router.post('/getFormCartId', cart.getCartFormId)
 // save address
-router.post('/saveaddress', cart.saveAddress)
+router.post('/saveaddress', address.saveAddress)
+// 获取收货地址
+router.get('/getaddress', address.getAddress)
 router.post('/paylist', cart.payList)
 router.get('/getPayList', cart.getPayList)
 router.post('/uploadFile', Upload.single('file'), uploader.uploadFile)
@@ -57,4 +60,6 @@ router.post('/setChat', chat.setChat)
 router.post('/registerBusiness', seller.registerSeller)
 // 商家登录
 router.post('/loginBusiness', seller.loginSeller)
+// 商家查询
+router.post('/findSellerUser', seller.findSellerUser)
 module.exports = router
