@@ -1,0 +1,18 @@
+.msg-content{
+  position: relative;
+  width: auto;
+  max-width: 200px;
+  height: auto;
+  color: #fff;
+  background: linear-gradient(60deg, rgb(255, 100, 20), #f00);
+  border-radius: 0px 150px 150px 150px;
+  padding: 0 5px;
+  margin: 5px 0;
+  margin-left: 10px;
+}
+.right{
+  /* left: 0px; */
+  margin-left: 41%;
+  background: linear-gradient(60deg, rgb(11, 164, 235), rgb(133, 39, 221));
+  border-radius: 150px 150px 0 150px;
+}

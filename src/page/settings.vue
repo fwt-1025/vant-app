@@ -7,7 +7,7 @@
         left-arrow
         @click-left="onClickLeft"
       />
-      <div class="width: 100%;margin-top: 60px;">
+      <div style="width: 100%;margin-top: 60px;">
         <van-cell  title="用户名" />
         <van-cell title="关于月淘淘" is-link to="common" />
         <van-cell title="隐私" is-link to="common" />

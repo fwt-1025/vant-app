@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import {getCartFormId} from '@/api/load-data.js'
+import {getCartFormId, payList, deleteCartGoods} from '@/api/load-data.js'
 import {mapState} from 'vuex'
 export default {
   data () {
@@ -130,6 +130,20 @@ export default {
       this.value = this.value.slice(0, this.value.length - 1)
     },
     onClose () {
+      let d = {
+        goodsid: this.goodsid
+      }
+      payList(this.showGoodsList).then(res => {
+        if (res.success) {
+          deleteCartGoods(d).then(re => {
+            if (re.success) {
+              this.$toast.success('结算成功')
+            }
+          })
+        } else {
+          this.$toast.success('结算失败')
+        }
+      })
       this.showPop = false
     }
   }

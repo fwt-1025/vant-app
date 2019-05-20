@@ -42,7 +42,9 @@ export default {
     this.userName = localUser().username
   },
   methods: {
-    onClickRight () {},
+    onClickRight () {
+      this.$router.push('/settings')
+    },
     getBuyerImg () {
       let d = {
         username: localUser().username,
@@ -57,7 +59,8 @@ export default {
     onRead (file) {
       let data = {
         data_img: file.content,
-        username: localUser().username
+        username: localUser().username,
+        auth: localUser().auth
       }
       uploadUserHead(data).then(res => {
         if (res.success) {

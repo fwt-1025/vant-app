@@ -119,6 +119,10 @@ const router = new Router({
     name: 'settings',
     path: '/settings',
     component: () => import('@/page/settings')
+  }, {
+    name: 'buyerChat',
+    path: '/buyerchat',
+    component: () => import('@/page/buyerChat')
   }]
 })
 router.beforeEach((to, from, next) => {

@@ -19,7 +19,7 @@
               :origin-price="(Number(item.price) + 50).toFixed(2)"
             >
               <div slot="footer">
-                <van-stepper @plus='plus(item)' @minus='minus(item)' v-model="item.goodsnumber" />
+                <van-stepper @plus='plus()' @minus='minus()' v-model="item.goodsnumber" />
               </div>
             </van-card>
           </template>
@@ -108,10 +108,11 @@ export default {
       }, 500)
     },
     plus (info) {
-      this.getAllPrice(true, info.price, 1)
+      console.log(info)
+      if (info) this.getAllPrice(true, info.price, 1)
     },
     minus (info) {
-      this.getAllPrice(false, info.price, 1)
+      if (info) this.getAllPrice(false, info.price, 1)
     },
     onSubmit () {
       if (this.checkList.length === 1 && this.checkList[0] === null) { 

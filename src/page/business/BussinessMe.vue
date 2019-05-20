@@ -42,7 +42,9 @@ export default {
     this.userName = localUser().userName
   },
   methods: {
-    onClickRight () {},
+    onClickRight () {
+      this.$router.push('/settings')
+    },
     getBuyerImg () {
       let d = {
         username: localUser().userName,
