@@ -4,7 +4,7 @@
     <van-tabbar v-model="$store.state.activeMenu">
       <van-tabbar-item icon="wap-home" v-if="buyer === '10001'" to='/home'>首页</van-tabbar-item>
       <van-tabbar-item icon="send-gift-o" v-if="buyer === '10001'" to='/smallpay' dot>微淘</van-tabbar-item>
-      <van-tabbar-item icon="chat-o" v-if="buyer === '10001'" to="/message" :info="msgContent">消息</van-tabbar-item>
+      <van-tabbar-item icon="chat-o" v-if="buyer === '10001'" to="/message" :info="$store.state.messageNumber">消息</van-tabbar-item>
       <van-tabbar-item icon="cart-o" v-if="buyer === '10001'" to="/cart" :info="$store.state.cartNumber">购物车</van-tabbar-item>
       <van-tabbar-item icon='upgrade' v-if="buyer === '20002'" to="/business/upload">发布</van-tabbar-item>
       <van-tabbar-item icon='chat-o' v-if="buyer === '20002'" to="/business/chat">聊天</van-tabbar-item>
@@ -36,9 +36,7 @@ export default {
     this.$store.commit('setActiveMenu', 0)
     this.buyer = JSON.parse(localStorage.getItem('user')).auth
     this.buyer === '10001' ? this.$store.dispatch('getCartNumber') : ''
-    // getCartGoods().then(res => {
-    //   this.cartGoods = res.data.length
-    // })
+    this.buyer === '10001' ? this.$store.dispatch('getMessageNumber') : ''
   },
   mounted () {
     window.console.log(this.cartNumber)

@@ -12,14 +12,14 @@ exports.getChat = async (ctx, next) => {
 }
 exports.setChat = async(ctx, next) => {
   console.log(ctx.request.body)
-  await mySqlModels.findChat(ctx.request.body.userName).then(async res => {
+  await mySqlModels.findChat(ctx.request.body.buyerName).then(async res => {
     console.log(res)
     if (res.length > 0) {
       ctx.body = {
         success: false
       }
     } else {
-      await mySqlModels.insertChat([ctx.request.body.goods_name, ctx.request.body.userName]).then(res => {
+      await mySqlModels.insertChat([ctx.request.body.goods_name, ctx.request.body.buyerName, ctx.request.body.bussinessName]).then(res => {
         if (res.warningCount === 0) {
           ctx.body = {
             message: '',

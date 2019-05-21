@@ -38,7 +38,7 @@ let buyerUser = `
     auth VARCHAR(100) NOT NULL,
     phone VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    account_img LONGTEXT NOT NULL,
+    account_img LONGBLOB NOT NULL,
     createTime TIMESTAMP(4) NOT NULL);`
 
 let cartgoods = `
@@ -82,7 +82,7 @@ let businessUser = `
     auth VARCHAR(100) NOT NULL,
     phone VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    account_img LONGTEXT NOT NULL,
+    account_img LONGBLOB NOT NULL,
     createTime VARCHAR(100) NOT NULL);`
 
 let upload = `
@@ -95,13 +95,15 @@ let upload = `
     goods_descript VARCHAR(100) NOT NULL,
     goods_area VARCHAR(100) NOT NULL,
     userName VARCHAR(100) NOT NULL,
+    account_img LONGTEXT NOT NULL,
     upload_time TIMESTAMP(4) NOT NULL
   );`
 let chat = `
 create table if not exists chat(
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   goods_name VARCHAR(100) NOT NULL,
-  userName VARCHAR(100) NOT NULL
+  buyerName VARCHAR(100) NOT NULL,
+  bussinessName VARCHAR(100) NOT NULL
 );`
 let createTable = (sql) => {
   return query(sql, [])
@@ -225,7 +227,7 @@ let findSeller = name => {
 }
 // 卖家上传图片
 let uploadImg = value => {
-  let _sql = `insert into upload set data_source=?,data_name=?,goods_name=?,goods_price=?,goods_area=?,goods_descript=?,userName=?,upload_time=?;`
+  let _sql = `insert into upload set data_source=?,data_name=?,goods_name=?,goods_price=?,goods_area=?,goods_descript=?,userName=?,account_img=?,upload_time=?;`
   return query(_sql, value)
 }
 let findSellerGoods = _ => {
@@ -233,11 +235,11 @@ let findSellerGoods = _ => {
   return query(_sql)
 }
 let insertChat = value => {
-  let _sql = `insert into chat set goods_name=?,userName=?;`
+  let _sql = `insert into chat set goods_name=?,buyerName=?,bussinessName=?;`
   return query(_sql, value)
 }
 let findChat = value => {
-  let _sql = value ? `select * from chat where userName="${value}"` : `select * from chat`
+  let _sql = value ? `select * from chat where buyerName="${value}"` : `select * from chat`
   return query(_sql)
 }
 module.exports = {

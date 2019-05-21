@@ -9,7 +9,7 @@ exports.uploadFile = async (ctx, next) => {
   datas.data_source = ctx.req.file.buffer
   datas.data_name = ctx.req.file.originalname
   let upload_time = new Date()
-  let data = [datas.data_source, datas.data_name, ctx.req.body.goods_name, ctx.req.body.goods_price, ctx.req.body.goods_descript, ctx.req.body.goods_area, ctx.req.body.userName, upload_time]
+  let data = [datas.data_source, datas.data_name, ctx.req.body.goods_name, ctx.req.body.goods_price, ctx.req.body.goods_descript, ctx.req.body.goods_area, ctx.req.body.userName,ctx.req.body.account_img, upload_time]
   await uploadMysql.uploadImg(data).then(res => {
     if (res.warningCount === 0) {
       ctx.body = {
@@ -34,12 +34,15 @@ exports.uploadFile = async (ctx, next) => {
 }
 // 上传头像
 exports.uploadBuyerHead = async(ctx, next) => {
-  let data = ctx.request.body
-  console.log('data', data.auth)
+  let data = ctx.req.body
+  let d = {
+    username: data.username,
+    data_img: ctx.req.file.buffer
+  }
   if (data.auth === '10001') {
     await uploadMysql.findUser(data.username).then(async res=> {
       if (res.length > 0) {
-        await uploadMysql.uploadBuyerHead(data).then(r => {
+        await uploadMysql.uploadBuyerHead(d).then(r => {
           if (r) {
             ctx.body = {
               success: true,
@@ -51,9 +54,8 @@ exports.uploadBuyerHead = async(ctx, next) => {
     })
   } else {
     await uploadMysql.findSeller(data.username).then(async res=> {
-      console.log('res', res)
       if (res.length > 0) {
-        await uploadMysql.uploadSellerHead(data).then(r => {
+        await uploadMysql.uploadSellerHead(d).then(r => {
           if (r) {
             ctx.body = {
               success: true,

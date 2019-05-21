@@ -11,7 +11,7 @@ exports.loginSeller = async (ctx, next) => {
           message: '欢迎进入商家平台',
           user: {
             id: res[0].id,
-            userName: res[0].userName,
+            username: res[0].userName,
             auth: res[0].auth
           }
         }
@@ -70,6 +70,12 @@ exports.sellerGoods = async (ctx, next) => {
         success: true,
         message: '',
         data: res
+      }
+    } else {
+      ctx.body = {
+        success: true,
+        message: '',
+        data: []
       }
     }
   })

@@ -35,6 +35,8 @@ export const getpayList = val => Vue.axios.get(api + '/getPayList', val).then(re
 export const getSellerGoods = () => Vue.axios.get(api + '/getGoods').then(res => res.data)
 
 export const getGoods = (obj) => Vue.axios.post(api + '/getVipGoods', obj).then(res => res.data)
+// 商家上传商品
+export const upload = obj => Vue.axios.post(api + '/uploadFile', obj).then(res => res.data)
 /*
 * author: Miss.Wang
 * 2018-12-19

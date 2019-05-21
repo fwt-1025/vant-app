@@ -6,7 +6,13 @@
 
 <script>
   export default {
-    
+    data () {
+      return {}
+    },
+    created () {
+      this.$store.commit('setActiveMenu', 2)
+    },
+    methods: {}
   }
 </script>
 

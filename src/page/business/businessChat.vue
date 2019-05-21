@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-nav-bar
-      :title="'商家:' + sellerUserName"
+      :title="'买家:' + sellerUserName"
       left-text="返回"
       left-arrow
       @click-left="onClickLeft"
@@ -36,11 +36,11 @@ export default {
   },
   created () {
     this.sellerData = this.$route.query.id
-    this.sellerUserName = this.sellerData.bussinessName
+    this.sellerUserName = this.sellerData.buyerName
   },
   mounted () {
     let buyer = localUser()
-    let b = 'buyer'
+    let b = 'seller'
     this.websocket = new WebSocket(`ws://127.0.0.1:3003/${b}${buyer.username}`)
     this.websocket.onopen = this.websocketOnopen
     this.websocket.onerror = this.websocketOnerror
@@ -62,7 +62,7 @@ export default {
     },
     websocketOnopen () {
       console.log('连接成功')
-      let s = 'seller'
+      let s = 'buyer'
       this.websocket.send(`{"msg": "${this.sendMsg}", "id": "${s}${this.sellerUserName}"}`)
     },
     websocketOnerror (e) {
@@ -89,7 +89,7 @@ export default {
       this.websocket.close()
     },
     sendSellerMsg () {
-      let s = 'seller'
+      let s = 'buyer'
       this.websocket.send(`{"msg": "${this.sendMsg}", "id": "${s}${this.sellerUserName}"}`)
       let oDiv = document.createElement('div')
       let oDiv2 = document.createElement('div')

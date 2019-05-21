@@ -122,7 +122,18 @@ const router = new Router({
   }, {
     name: 'buyerChat',
     path: '/buyerchat',
-    component: () => import('@/page/buyerChat')
+    component: () => import('@/page/buyerChat'),
+    meta: {
+      requireLogin: true,
+      auth: '10001'
+    }
+  }, {
+    path: '/business/bussinessChat',
+    component: () => import('@/page/business/businessChat'),
+    meta: {
+      requireLogin: true,
+      auth: '20001'
+    }
   }]
 })
 router.beforeEach((to, from, next) => {

@@ -8,7 +8,7 @@
         @click-left="onClickLeft"
       />
       <div style="width: 100%;margin-top: 60px;">
-        <van-cell  title="用户名" />
+        <van-cell  title="用户名" :value='username'/>
         <van-cell title="关于月淘淘" is-link to="common" />
         <van-cell title="隐私" is-link to="common" />
         <van-cell title="通用" is-link to="common" />
@@ -21,10 +21,12 @@
 </template>
 
 <script>
+import {localUser} from '@/util/local.js'
 export default {
   data () {
     return {
-      addshowPop: false
+      addshowPop: false,
+      username: localUser().username
     }
   },
   mounted () {

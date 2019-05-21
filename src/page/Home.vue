@@ -10,7 +10,7 @@
       <div class="search-box" @click='popupShow=true'>
         <!-- <i class="fa fa-search"></i> -->
         <van-icon name="search"/>
-        <input type="text" disabled placeholder="商品五折起">
+        <input type="text" style="width: 150px;" disabled placeholder="商品五折起">
       </div>
       <div class="helper">
         <van-icon name="like-o"/>

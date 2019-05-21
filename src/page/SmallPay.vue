@@ -3,36 +3,45 @@
       <van-nav-bar
         title="微淘"
       />
-      <div style="width: 100%;margin-top: 60px;">
-        <div class="small-pay-box">
+      <div style="width: 100%;">
+        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <div class="small-pay-box" v-if="showList.length > 0">
           <div v-for="(item,index) in showList" :key='index' class="uploadGoods" @click="goodDetails(item)">
-            <div class="seller-top" style="margin-bottom: 5vw;"><span class="pic"><img v-if="account_img" class="img-box" :src="account_img" alt="">
-        <van-icon class="user-icon" v-else name="user-circle-o" /></span>{{item.userName}} 于 {{$moment(item.upload_time).format('YYYY-MM-DD HH:mm:ss')}}发布了</div>
+            <div class="seller-top" style="margin-bottom: 5vw;">
+              <span class="pic">
+                <img v-if="item.account_img" class="img-box" :src="item.account_img" alt="">
+                <van-icon class="user-icon" v-else name="user-circle-o" />
+              </span>{{item.userName}} 于 {{$moment(item.upload_time).format('YYYY-MM-DD HH:mm:ss')}}发布了</div>
             <img :src="item.data_source" alt="" @click="show = true">
             <van-image-preview
               v-model="show"
               :images="images"
               @change="onChange"
             >
-              <template v-slot:index>第{ index }页</template>
+              <!-- <template v-slot:index></template> -->
             </van-image-preview>
             <div class="msg" @click="chat(item, $event)">联系商家</div>
           </div>
         </div>
+        <div class='no-msg' v-else>
+          暂无最新消息
+        </div>
+        </van-pull-refresh>
       </div>
   </div>
 </template>
 
 <script>
+import {localUser} from '@/util/local.js'
 import {getSellerGoods, setChat} from '@/api/load-data.js'
 export default {
   data () {
     return {
       addshowPop: false,
       showList: [],
-      account_img: null,
       images: [],
-      show: false
+      show: false,
+      isLoading: false
     }
   },
   created () {
@@ -45,6 +54,8 @@ export default {
             var str12 = this.arrayBufferToBase64(item.data_source.data)//转换字符串
             item.data_source = 'data:image/png;base64,' + str12
             this.images.push(item.data_source)
+            // var str13 = this.arrayBufferToBase64(item.account_img.data)//转换字符串
+            // item.account_img = 'data:image/png;base64,' + str13
           })
         this.showList = res.data
       }
@@ -67,17 +78,30 @@ export default {
       e.stopPropagation()
       let data = {
         goods_name: item.goods_name,
-        userName: item.userName
+        bussinessName: item.userName,
+        buyerName: localUser().username
       }
       setChat(data).then(res => {
-        // if (res.success) {
         this.$router.push({path: '/buyerchat', query: {id: item}})
-        // } else {
-
-        // }
       })
     },
-    onChange () {}
+    onChange () {},
+    onRefresh () {
+      setTimeout(() => {
+        getSellerGoods().then(res => {
+          if (res.success) {
+            this.$toast('刷新成功')
+            this.isLoading = false
+            res.data.map(item => {
+              var str12 = this.arrayBufferToBase64(item.data_source.data)//转换字符串
+              item.data_source = 'data:image/png;base64,' + str12
+              this.images.push(item.data_source)
+            })
+            this.showList = res.data
+          }
+        })
+      }, 500)
+    }
   }
 }
 </script>
@@ -130,10 +154,6 @@ export default {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    // background: url('../../assets/logo/logo.jpg') no-repeat;
-    // background-origin: content-box;
-    // background-clip:content-box;
-    // background-size: 100% 100%;
   }
 }
 .msg{
@@ -158,5 +178,12 @@ export default {
   height: 30px;
   border-radius: 50%;
   margin:10px;
+}
+.no-msg{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

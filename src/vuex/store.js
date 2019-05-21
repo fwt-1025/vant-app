@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
-import {getCartGoods} from '@/api/load-data.js'
+import {getCartGoods, getChat} from '@/api/load-data.js'
 const store = new Vuex.Store({
   state: {
     activeMenu: 0,
@@ -16,6 +16,7 @@ const store = new Vuex.Store({
       auth: ''
     },
     cartNumber: 0,
+    messageNumber: 0,
     goosShow: [],
     goodsId: []
   },
@@ -32,6 +33,9 @@ const store = new Vuex.Store({
     setCartNumber (state, val) {
       state.cartNumber = val
     },
+    setMessageNumber (state, val) {
+      state.messageNumber = val
+    },
     setGoodsShow (state, val) {
       state.goosShow = val
     },
@@ -44,6 +48,12 @@ const store = new Vuex.Store({
       let res = await getCartGoods()
       if (res.success) {
         commit('setCartNumber', res.data.length)
+      }
+    },
+    async getMessageNumber ({commit}) {
+      let res = await getChat()
+      if (res.success) {
+        commit('setMessageNumber', res.data.length)
       }
     }
   }

@@ -6,12 +6,14 @@
       @click-right="onClickRight"
     />
     <div style="margin-top: 46px;text-align:center">
-      <van-uploader :after-read="onRead" accept="image/gif, image/jpeg" multiple>
-        <img v-if="account_img" class="img-box" :src="account_img" alt="">
-        <van-icon class="user-icon" v-else name="user-circle-o" />
-        <p>点击上传头像</p>
-        <p style="margin: 10px 0; color: #55ddff">用户名: {{userName}}</p>
-      </van-uploader>
+      <form enctype="multipart/form-data">
+        <van-uploader :after-read="onRead" class="files" name="files" accept="image/gif, image/jpeg" multiple>
+          <img v-if="lenth > 0" class="img-box" :src="images" alt="">
+          <van-icon class="user-icon" v-else name="user-circle-o" />
+          <p>点击上传头像</p>
+          <p style="margin: 10px 0; color: #55ddff">用户名: {{userName}}</p>
+        </van-uploader>
+      </form>
     </div>
     <van-cell icon='passed' title="支付" is-link to="common" />
     <van-cell icon='star-o' title="收藏" is-link to="common" />
@@ -24,18 +26,16 @@
 <script>
 import {uploadUserHead, findUser} from '@/api/load-data.js'
 import {mapState} from 'vuex'
-import {localUser} from '@/util/local.js'
+import {localUser, arrayBufferToBase64} from '@/util/local.js'
 export default {
   data () {
     return {
       account_img: '',
-      userName: ''
+      userName: '',
+      images: null,
+      lenth: null
     }
   },
-  // computed: mapState({
-  //   buyer: state => state.buyer,
-  //   bussiness: state => state.bussiness
-  // }),
   created () {
     this.$store.commit('setActiveMenu', 4)
     this.getBuyerImg()
@@ -53,16 +53,18 @@ export default {
       findUser(d).then(res => {
         if (res.success) {
           this.account_img = res.data.account_img
+          this.lenth = this.account_img.data.length
+          var str12 = arrayBufferToBase64(res.data.account_img.data)//转换字符串
+          this.images = 'data:image/png;base64,' + str12
         }
       })
     },
     onRead (file) {
-      let data = {
-        data_img: file.content,
-        username: localUser().username,
-        auth: localUser().auth
-      }
-      uploadUserHead(data).then(res => {
+      var formData = new FormData()
+      formData.append('username', localUser().username)
+      formData.append('file', file.file)
+      formData.append('auth', localUser().auth)
+      uploadUserHead(formData).then(res => {
         if (res.success) {
           this.getBuyerImg()
         }

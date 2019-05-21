@@ -25,7 +25,7 @@ var storage = multer.diskStorage({
 })
 // 加载配置
 // var upload = multer({storage: storage})
-
+// console.log(Upload.single('files'))
 // 路由
 router.post('/login', account.login)
 // 注册
@@ -33,7 +33,7 @@ router.post('/register', account.register)
 // 查询用户
 router.post('/findUser', account.findBuyerUser)
 // 上传头像
-router.post('/uploadHead', uploader.uploadBuyerHead)
+router.post('/uploadHead', Upload.single('file'), uploader.uploadBuyerHead)
 // add to cart
 router.post('/addtocart', cart.saveCart)
 // get from cart

@@ -78,18 +78,3 @@ exports.findBuyerUser = async (ctx, next) => {
     }
   })
 }
-exports.uploadBuyerHead = async(ctx, next) => {
-  let data = ctx.request.body
-  await userModel.findUser(data.username).then(async res=> {
-    if (res.length > 0) {
-      await userModel.uploadBuyerHead(data).then(r => {
-        if (r) {
-          ctx.body = {
-            success: true,
-            message: '上传成功!'
-          }
-        }
-      })
-    }
-  })
-}
