@@ -19,7 +19,7 @@
 
 <script>
 import '@/styles/chat.scss'
-import {findSellerUser} from '@/api/load-data.js'
+import {findUser, findSellerUser} from '@/api/load-data.js'
 import {localUser, arrayBufferToBase64} from '@/util/local.js'
 // import {XButton, XHeader} from 'vux'
 export default {
@@ -48,12 +48,18 @@ export default {
     this.websocket.onsend = this.websocketSendmessage
     this.websocket.onclose = this.websocketClose
     let d = {
-      username: localUser().username,
-      auth: localUser().auth
+      username: this.sellerUserName,
     }
     findSellerUser(d).then(res => {
       var str12 = arrayBufferToBase64(res.data.account_img.data)//转换字符串
-      this.account_img = 'data:image/png;base64,' + str12
+      this.seller_img = 'data:image/png;base64,' + str12
+    })
+    let da = {
+      username: localUser().username
+    }
+    findUser(da).then(res => {
+      var str12 = arrayBufferToBase64(res.data.account_img.data)//转换字符串
+      this.buyer_img = 'data:image/png;base64,' + str12
     })
   },
   methods: {
@@ -77,7 +83,7 @@ export default {
       let oImg = document.createElement('img')
       oDiv.className = 'msg-content'
       oDiv.innerHTML = receiveData.msg
-      oImg.src = `${this.account_img}`
+      oImg.src = `${this.seller_img}`
       oDiv.appendChild(oDiv2)
       oDiv.appendChild(oImg)
       this.$refs.contentBox.appendChild(oDiv)
@@ -96,7 +102,7 @@ export default {
       let oImg = document.createElement('img')
       oDiv.className = 'msg-content right'
       oDiv2.innerHTML = this.sendMsg
-      oImg.src = `${this.account_img}`
+      oImg.src = `${this.buyer_img}`
       oDiv.appendChild(oDiv2)
       oDiv.appendChild(oImg)
       this.$refs.contentBox.appendChild(oDiv)

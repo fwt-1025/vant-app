@@ -45,3 +45,5 @@ export const getsearchList = (obj) => Vue.axios.get('https://suggest.taobao.com/
 
 export const getChat = () => Vue.axios.get(api + '/getChat').then(res => res.data)
 export const setChat = (obj) => Vue.axios.post(api + '/setChat', obj).then(res => res.data)
+// 根据时间统计
+export const getEchPayList = () => Vue.axios.get(api + '/getEchPayList').then(res => res.data)

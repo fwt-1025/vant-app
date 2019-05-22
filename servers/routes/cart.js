@@ -105,7 +105,7 @@ exports.getCartFormId = async (ctx, next) => {
 //结算
 exports.payList = async (ctx, next) => {
   let goods = eval(ctx.request.body)
-  console.log('goods', typeof goods)
+  console.log('goods', goods)
   // 存购物车数据时,要考虑是否存了同一件商品,所以要先查找数据库中是否已存在相同的商品
   await userModel.payList(goods).then(res => {
     if (res.insertId) {
@@ -136,6 +136,20 @@ exports.getPayList = async (ctx, next) => {
         success: false,
         message: '处理错误',
         data: null
+      }
+    }
+  })
+}
+// 根据时间统计购买数量
+exports.echPayList = async (ctx) => {
+  await userModel.echPayList().then(res => {
+    if (res) {
+      let d = []
+      res.map((item,index) => {
+        d[index] = [item.time, item['sum(goodsnumber)']]
+      })
+      ctx.body = {
+        data: d
       }
     }
   })

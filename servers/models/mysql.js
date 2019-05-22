@@ -72,7 +72,8 @@ let paylist = `
     imgurl LONGTEXT NOT NULL,
     price VARCHAR(100) NOT NULL,
     goodsnumber VARCHAR(100) NOT NULL,
-    goodsdescript VARCHAR(100) NOT NULL
+    goodsdescript VARCHAR(100) NOT NULL,
+    createtime VARCHAR(100) NOT NULL
   );`
 let businessUser = `
   create table if not exists businessUser(
@@ -194,14 +195,22 @@ let payList = value => {
   let data1 = []
   let _sql
   for (let i in value) {
-    data = `('${value[i].goodsid}','${value[i].imgurl}','${value[i].price}','${value[i].goodsnumber}','${value[i].goodsdescript}')`
+    data = `('${value[i].goodsid}','${value[i].imgurl}','${value[i].price}','${value[i].goodsnumber}','${value[i].goodsdescript}', '${value[i].createtime}')`
     data1.push(data)
   }
-  _sql = `insert into paylist(goodsid,imgurl,price,goodsnumber,goodsdescript) VALUES ${data1.join()};`
+  _sql = `insert into paylist(goodsid,imgurl,price,goodsnumber,goodsdescript,createtime) VALUES ${data1.join()};`
+  console.log(_sql)
   return query(_sql)
 }
 let getPayList = () => {
   let _sql = `select * from paylist`
+  return query(_sql)
+}
+// 根据购买时间统计数量
+let echPayList = () => {
+  let _sql = `select date_format(createtime, '%Y-%m-%d') as time,sum(goodsnumber) 
+  from paylist 
+  GROUP BY date_format(createtime, '%Y-%m-%d');`
   return query(_sql)
 }
 // 卖家注册
@@ -256,6 +265,7 @@ module.exports = {
   getAddress,
   payList,
   getPayList,
+  echPayList,
   uploadImg,
   insertSeller,
   uploadSellerHead,

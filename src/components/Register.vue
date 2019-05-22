@@ -151,7 +151,7 @@ export default {
 
 <style lang="scss" scoped>
 .loginBox{
-  padding: 0 10px;
+  // padding: 0 10px;
   .login-title{
     font-size: 26px;
     font-weight: 500;
@@ -159,7 +159,9 @@ export default {
     padding: 50px 0;
   }
 }
-
+.van-cell-group{
+  padding: 0 10px;
+}
 .van-radio{
   display: inline-block;
   margin: 10px;

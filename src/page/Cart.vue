@@ -19,7 +19,7 @@
               :origin-price="(Number(item.price) + 50).toFixed(2)"
             >
               <div slot="footer">
-                <van-stepper @plus='plus()' @minus='minus()' v-model="item.goodsnumber" />
+                <van-stepper @plus="item.flag ? plus(item) : ''" @minus="item.flag ? minus(item) : ''" v-model="item.goodsnumber" />
               </div>
             </van-card>
           </template>
@@ -56,7 +56,9 @@ export default {
       checked: [],
       isLoading: false,
       allGoodPrice: 0,
-      checkList: []
+      checkList: [],
+      goodsCheckList: [],
+      listIndex: null
     }
   },
   created () {
@@ -73,7 +75,7 @@ export default {
           this.goodsList.map(() => {
             var f = false
             this.checked.push(f)
-            this.checkList.push(null)
+            // this.checkList.push(null)
           })
         } else {
           this.$toast.fail('网络开小差了!稍后再试')
@@ -85,14 +87,38 @@ export default {
     },
     toggleChange (index, info) {
       if (this.$refs.checkboxes[index].checked) {
+        info.flag = true
         if (this.checkList.indexOf(info.goodsid) < 0) {
-          this.checkList[index] = Number(info.goodsid)
+          // this.checkList[index] = Number(info.goodsid)
+          // 如果是空的,肯定没有重复的,直接添加,然后在判断是否有重复的
+          if (this.goodsCheckList.length > 0) {
+            // 判断是否有重复
+            this.goodsCheckList.map((item, index) => {
+              if (item.goodsid !== info.goodsid) {
+                this.goodsCheckList.push(info)
+                this.checkList.push(info.goodsid)
+              } else {
+                return false
+              }
+            })
+          } else {
+            this.goodsCheckList.push(info)
+            this.checkList.push(info.goodsid)
+          }
           this.getAllPrice(true, info.price, info.goodsnumber)
         }
       } else {
-        this.checkList.splice(this.checkList.indexOf(Number(info.goodsid)), 1, null)
+        info.flag = false
+        this.checkList.splice(this.checkList.indexOf(info.goodsid), 1)
+        this.goodsCheckList.map((item, index) => {
+          if (item.goodsid === info.goodsid) {
+            this.listIndex = index
+          }
+        })
+        this.goodsCheckList.splice(this.listIndex, 1)
         this.getAllPrice(false, info.price, info.goodsnumber)
       }
+      console.log(this.checkList)
     },
     getAllPrice (f, price, number) {
       if (f) {
@@ -108,7 +134,6 @@ export default {
       }, 500)
     },
     plus (info) {
-      console.log(info)
       if (info) this.getAllPrice(true, info.price, 1)
     },
     minus (info) {
@@ -119,8 +144,10 @@ export default {
         this.$toast.fail('请选择一个商品')
         return false
       }
+      console.log(this.checkList)
       if (!this.clickFlag) {
         this.$store.commit('setgoodsId', this.checkList)
+        this.$store.commit('setGoodsShow', this.goodsCheckList)
         this.$router.push({name: 'pay'})
       } else {
         let data = {

@@ -48,6 +48,7 @@ router.post('/saveaddress', address.saveAddress)
 router.get('/getaddress', address.getAddress)
 router.post('/paylist', cart.payList)
 router.get('/getPayList', cart.getPayList)
+router.get('/getEchPayList', cart.echPayList)
 router.post('/uploadFile', Upload.single('file'), uploader.uploadFile)
 router.get('/getGoods', seller.sellerGoods)
 // 获取商品

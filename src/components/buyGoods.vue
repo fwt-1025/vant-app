@@ -76,7 +76,6 @@ export default {
       user: {},
       showGoodsList: [],
       goodsInfo: [],
-      goodsid: [],
       allPrice: null
     }
   },
@@ -85,31 +84,21 @@ export default {
     goodsId: state => state.goodsId
   }),
   created () {
+    console.log(this.goodsId)
     window.console.log(eval(this.$route.params.id))
     this.user = this.$route.params.d ? this.$route.params.d : this.dataUser
-    this.goodsInfo = this.goodsShow.length > 0 ? this.goodsShow : this.goodsId
-    if (!this.goodsShow.length > 0) {
-      this.goodsInfo.map(item => {
-        this.goodsid.push(item)
-      })
-      // console.log(this.goodsInfo)
-      let data = {
-        goodsid: this.goodsid
-      }
-      getCartFormId(data).then(res => {
-        if (res.success) {
-          this.showGoodsList = res.data
-          this.showGoodsList.map(item => {
-            this.allPrice += item.price * item.goodsnumber
-          })
-        }
-      })
+    if (this.goodsShow.length > 0) {
+      this.showGoodsList = this.goodsShow
     } else {
-      this.showGoodsList = this.goodsInfo
+      this.$toast('网络开小差了')
     }
+    this.showGoodsList.map(item => {
+      this.allPrice += item.price * item.goodsnumber
+    })
+    console.log(this.allPrice)
   },
   mounted () {
-    window.console.log(this.goodsShow)
+    // window.console.log(this.goodsShow)
   },
   methods: {
     /*eslint no-dupe-keys: "error"*/
@@ -130,21 +119,49 @@ export default {
       this.value = this.value.slice(0, this.value.length - 1)
     },
     onClose () {
+      var that = this
+      console.log(this.goodsId)
       let d = {
-        goodsid: this.goodsid
+        goodsid: this.goodsId
       }
+      this.showGoodsList.map(item => {
+        item.createtime = this.$moment().format('YYYY-MM-DD')
+        // item.createtime = new Date()
+      })
       payList(this.showGoodsList).then(res => {
         if (res.success) {
-          deleteCartGoods(d).then(re => {
-            if (re.success) {
-              this.$toast.success('结算成功')
-            }
-          })
+          if (this.$route.query.id) {
+            this.$toast({
+              type: 'success',
+              mask: true,
+              loading: 'spinner',
+              message: '结算成功',
+              duration: 1500,
+              onClose: () => {
+                that.$router.push('/home')
+              }
+            })
+          } else {
+            deleteCartGoods(d).then(re => {
+              if (re.success) {
+                this.$toast({
+                  type: 'success',
+                  mask: true,
+                  loading: 'spinner',
+                  message: '结算成功',
+                  duration: 1500,
+                  onClose: () => {
+                    that.$router.push('/cart')
+                  }
+                })
+              }
+            })
+          }
         } else {
           this.$toast.success('结算失败')
         }
       })
-      this.showPop = false
+      // this.showPop = false
     }
   }
 }

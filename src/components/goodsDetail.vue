@@ -189,7 +189,7 @@ export default {
       let d = []
       d.push(data)
       this.$store.commit('setGoodsShow', d)
-      this.$router.push({path: '/goodsDetail/pay'})
+      this.$router.push({path: '/goodsDetail/pay', query: {id: true}})
     },
     onAddCartClicked (info) {
       let data = {

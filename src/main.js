@@ -11,12 +11,15 @@ import moment from 'moment'
 import { Lazyload } from 'vant';
 import { ImagePreview } from 'vant';
 import { Uploader } from 'vant';
+import echarts from 'echarts'
+
 
 import './styles/common.scss'
 Vue.use(Uploader);
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 Vue.prototype.$moment = moment
+Vue.prototype.$echarts = echarts
 Vue.use(Vant)
 Vue.use(Lazyload)
 Vue.use(ImagePreview);
