@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 var Koa = require('koa')
 const router = require('koa-router')()
 const bodyParser = require('koa-bodyparser')
@@ -73,7 +74,7 @@ app.use(session({
 app.use(require('./routes/index').routes())
 
 server.listen(config.port, () => {
-  console.log('hello，yours servers is ruuning at localhost:' + config.port)
+  console.log(chalk.yellow('[月淘淘温馨提示]:'),chalk.blueBright('hello，yours servers is ruuning at localhost:' + config.port))
 })
 
 

@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     toChat (item) {
-      this.$router.push({path: '/business/bussinessChat', query: {id: item}})
+      this.$router.push({path: '/business/bussinessChat', query: {id: item.buyerName}})
     }
   }
 }

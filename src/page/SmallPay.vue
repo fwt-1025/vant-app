@@ -81,8 +81,9 @@ export default {
         bussinessName: item.userName,
         buyerName: localUser().username
       }
+      console.log('itemUser', item.userName)
       setChat(data).then(res => {
-        this.$router.push({path: '/buyerchat', query: {id: item}})
+        this.$router.push({path: '/buyerchat', query: {id: item.userName}})
       })
     },
     onChange () {},

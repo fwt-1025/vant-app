@@ -12,7 +12,7 @@
       <div class="contentBox" ref="contentBox"></div>
     </article>
     <footer class="footer">
-      <input type="text" v-model="sendMsg"><van-button class="btn" @click='sendSellerMsg'>发送</van-button>
+      <input type="text" ref="myInput" v-model="sendMsg"><van-button class="btn" @click='sendSellerMsg'>发送</van-button>
     </footer>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
   },
   created () {
     this.sellerData = this.$route.query.id
-    this.sellerUserName = this.sellerData.buyerName
+    this.sellerUserName = this.sellerData
   },
   mounted () {
     let buyer = localUser()
@@ -50,7 +50,8 @@ export default {
     this.websocket.onsend = this.websocketSendmessage
     this.websocket.onclose = this.websocketClose
     let d = {
-      username: localUser().username
+      username: localUser().username,
+      auth: '10001'
     }
     findSellerUser(d).then(res => {
       var str12 = arrayBufferToBase64(res.data.account_img.data)//转换字符串
@@ -97,18 +98,22 @@ export default {
       this.websocket.close()
     },
     sendSellerMsg () {
-      let s = 'buyer'
-      this.websocket.send(`{"msg": "${this.sendMsg}", "id": "${s}${this.sellerUserName}"}`)
-      let oDiv = document.createElement('div')
-      let oDiv2 = document.createElement('div')
-      let oImg = document.createElement('img')
-      oDiv.className = 'msg-content right'
-      oDiv2.innerHTML = this.sendMsg
-      oImg.src = `${this.seller_img}`
-      oDiv.appendChild(oDiv2)
-      oDiv.appendChild(oImg)
-      this.$refs.contentBox.appendChild(oDiv)
-      this.sendMsg = ''
+      if (this.sendMsg) {
+        let s = 'buyer'
+        this.websocket.send(`{"msg": "${this.sendMsg}", "id": "${s}${this.sellerUserName}"}`)
+        let oDiv = document.createElement('div')
+        let oDiv2 = document.createElement('div')
+        let oImg = document.createElement('img')
+        oDiv.className = 'msg-content right'
+        oDiv2.innerHTML = this.sendMsg
+        oImg.src = `${this.seller_img}`
+        oDiv.appendChild(oDiv2)
+        oDiv.appendChild(oImg)
+        this.$refs.contentBox.appendChild(oDiv)
+        this.sendMsg = ''
+      } else {
+        this.$refs.myInput.focus()
+      }
     }
   }
 }

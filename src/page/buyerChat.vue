@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="overflow: hidden">
     <van-nav-bar
       :title="'商家:' + sellerUserName"
       left-text="返回"
@@ -12,7 +12,7 @@
       <div class="contentBox" ref="contentBox"></div>
     </article>
     <footer class="footer">
-      <input type="text" v-model="sendMsg"><van-button class="btn" @click='sendSellerMsg'>发送</van-button>
+      <input type="text" ref="myInput" v-model="sendMsg"><van-button class="btn" @click='sendSellerMsg'>发送</van-button>
     </footer>
   </div>
 </template>
@@ -36,9 +36,10 @@ export default {
   },
   created () {
     this.sellerData = this.$route.query.id
-    this.sellerUserName = this.sellerData.bussinessName
+    this.sellerUserName = this.sellerData
   },
   mounted () {
+    document.body.style.overflow = 'hidden'
     let buyer = localUser()
     let b = 'buyer'
     this.websocket = new WebSocket(`ws://127.0.0.1:3003/${b}${buyer.username}`)
@@ -49,6 +50,7 @@ export default {
     this.websocket.onclose = this.websocketClose
     let d = {
       username: this.sellerUserName,
+      auth: '20002'
     }
     findSellerUser(d).then(res => {
       var str12 = arrayBufferToBase64(res.data.account_img.data)//转换字符串
@@ -95,19 +97,27 @@ export default {
       this.websocket.close()
     },
     sendSellerMsg () {
-      let s = 'seller'
-      this.websocket.send(`{"msg": "${this.sendMsg}", "id": "${s}${this.sellerUserName}"}`)
-      let oDiv = document.createElement('div')
-      let oDiv2 = document.createElement('div')
-      let oImg = document.createElement('img')
-      oDiv.className = 'msg-content right'
-      oDiv2.innerHTML = this.sendMsg
-      oImg.src = `${this.buyer_img}`
-      oDiv.appendChild(oDiv2)
-      oDiv.appendChild(oImg)
-      this.$refs.contentBox.appendChild(oDiv)
-      this.sendMsg = ''
+      if (this.sendMsg) {
+        let s = 'seller'
+        this.websocket.send(`{"msg": "${this.sendMsg}", "id": "${s}${this.sellerUserName}"}`)
+        let oDiv = document.createElement('div')
+        let oDiv2 = document.createElement('div')
+        let oImg = document.createElement('img')
+        oDiv.className = 'msg-content right'
+        oDiv2.innerHTML = this.sendMsg
+        oImg.src = `${this.buyer_img}`
+        oDiv.appendChild(oDiv2)
+        oDiv.appendChild(oImg)
+        this.$refs.contentBox.appendChild(oDiv)
+        this.sendMsg = ''
+        this.$refs.myInput.focus()
+      } else {
+        this.$toast('请输入要发送的消息')
+      }
     }
+  },
+  destroyed () {
+    document.body.style.overflow = 'auto'
   }
 }
 </script>

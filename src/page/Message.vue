@@ -28,6 +28,9 @@ export default {
       chatList: []
     }
   },
+  created () {
+    this.$store.commit('setActiveMenu', 2)
+  },
   mounted () {
     getChat().then(res => {
       if (res.success) {
@@ -37,7 +40,7 @@ export default {
   },
   methods: {
     toChat (item) {
-      this.$router.push({path: '/buyerchat', query: {id: item}})
+      this.$router.push({path: '/buyerchat', query: {id: item.bussinessName}})
     }
   }
 }
