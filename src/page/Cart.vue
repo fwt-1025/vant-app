@@ -140,27 +140,28 @@ export default {
       if (info) this.getAllPrice(false, info.price, 1)
     },
     onSubmit () {
-      if (this.checkList.length === 1 && this.checkList[0] === null) { 
+      console.log(this.goodsCheckList)
+      if (this.checkList.length === 0) { 
         this.$toast.fail('请选择一个商品')
         return false
-      }
-      console.log(this.checkList)
-      if (!this.clickFlag) {
-        this.$store.commit('setgoodsId', this.checkList)
-        this.$store.commit('setGoodsShow', this.goodsCheckList)
-        this.$router.push({name: 'pay'})
       } else {
-        let data = {
-          goodsid: this.checkList
-        }
-        deleteCartGoods(data).then(res => {
-          if (res.success) {
-            this.$toast.success('删除成功')
-            this.clickFlag = false
-            this.getGoodsList()
-            this.$store.dispatch('getCartNumber')
+        if (!this.clickFlag) {
+          this.$store.commit('setgoodsId', this.checkList)
+          this.$store.commit('setGoodsShow', this.goodsCheckList)
+          this.$router.push({name: 'pay'})
+        } else {
+          let data = {
+            goodsid: this.checkList
           }
-        })
+          deleteCartGoods(data).then(res => {
+            if (res.success) {
+              this.$toast.success('删除成功')
+              this.clickFlag = false
+              this.getGoodsList()
+              this.$store.dispatch('getCartNumber')
+            }
+          })
+        }
       }
     }
   }

@@ -12,9 +12,11 @@ import { Lazyload } from 'vant';
 import { ImagePreview } from 'vant';
 import { Uploader } from 'vant';
 import echarts from 'echarts'
+// import VConsole from 'vconsole/dist/vconsole.min.js' //import vconsole
 
 
 import './styles/common.scss'
+// let vConsole = new VConsole() // 初始化
 Vue.use(Uploader);
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
