@@ -7,7 +7,7 @@
         <van-icon name="contact"/>
         <p>{{buyer ? '我的' : '登录'}}</p>
       </div>
-      <div class="search-box" @click='popupShow=true'>
+      <div class="search-box" @click="$router.push('/searchgoods')">
         <!-- <i class="fa fa-search"></i> -->
         <van-icon name="search"/>
         <input type="text" style="width: 150px;" disabled placeholder="商品五折起">
@@ -30,7 +30,9 @@
     </van-swipe>
     <van-panel title="头条" desc="今日头条低价售卖各类服装" status="Hot">
       <div class="hot-box">
-        <div  v-for="item in 4" :key="item">第{{item}}件商品</div>
+        <div  v-for="item in imgList" :key="item">
+          <img style="width: 100%;height: 100%;" :src=item alt="">
+        </div>
       </div>
     </van-panel>
     <!-- 滚动导航 -->
@@ -56,6 +58,10 @@ import image2 from '@/assets/banner/5a5963dbe9c2cb010bd10b6bc61d31e6.jpg'
 import image3 from '@/assets/banner/a60ef2989505a0a4016c9cb8f7d8cc17.png'
 import image4 from '@/assets/banner/cd3258c9e6e2116b37709ffe07ad50c8.jpg'
 import image5 from '@/assets/banner/f43dea7aeca14b172041a7daea7d1e95.jpg'
+import image6 from '@/assets/hoters/2.jpg'
+import image7 from '@/assets/hoters/3.jpg'
+import image8 from '@/assets/hoters/4.jpg'
+import image9 from '@/assets/hoters/5.jpg'
 export default {
   data () {
     return {
@@ -86,6 +92,7 @@ export default {
         url: '123123',
         descript: '包包'
       }],
+      imgList: [image6, image7, image8, image9],
       images: [image1, image2, image3, image4, image5]
     }
   },
@@ -99,6 +106,9 @@ export default {
   methods: {
     className (index) {
       return "item-list" + index
+    },
+    searchGoods () {
+      this.$router.push({path: '/searchgoods'})
     }
   }
 }

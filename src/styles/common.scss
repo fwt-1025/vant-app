@@ -13,3 +13,12 @@
   background: linear-gradient(60deg, #55ddff, rgb(82, 162, 253));
   border: 1px solid #55ddff
 }
+.van-loading{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  margin-left: -35px;
+  margin-top: -35px;
+}

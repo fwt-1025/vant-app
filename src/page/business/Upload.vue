@@ -89,6 +89,7 @@ export default {
       formData.append('goods_descript', this.goodInfo.goods_descript)
       formData.append('goods_area', this.goodInfo.goods_area)
       formData.append('userName', localUser().username)
+      formData.append('goodsid', localUser().username + Math.ceil(Math.random() * 10000))
       formData.append('account_img', this.goodInfo.account_img)
       console.log(formData)
       upload(formData).then(res => {

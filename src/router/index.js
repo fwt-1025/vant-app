@@ -82,6 +82,7 @@ const router = new Router({
     path: '/register',
     component: () => import('@/components/Register.vue')
   }, {
+    name: 'goodsDetail',
     path: '/goodsDetail',
     component: () => import('@/components/goodsDetail.vue'),
     meta: {
@@ -123,6 +124,14 @@ const router = new Router({
     name: 'buyerChat',
     path: '/buyerchat',
     component: () => import('@/page/buyerChat'),
+    meta: {
+      requireLogin: true,
+      auth: '10001'
+    }
+  }, {
+    name: 'searchgoods',
+    path: '/searchgoods',
+    component: () => import('@/page/searchGoods'),
     meta: {
       requireLogin: true,
       auth: '10001'

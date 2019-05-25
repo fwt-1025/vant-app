@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 import {getCartGoods, getChat} from '@/api/load-data.js'
+import {localUser} from '@/util/local.js'
 const store = new Vuex.Store({
   state: {
     activeMenu: 0,
@@ -45,13 +46,20 @@ const store = new Vuex.Store({
   },
   actions: {
     async getCartNumber ({commit}) {
-      let res = await getCartGoods()
+      let da = {
+        goodsid: '',
+        username: localUser().username
+      }
+      let res = await getCartGoods(da)
       if (res.success) {
         commit('setCartNumber', res.data.length)
       }
     },
     async getMessageNumber ({commit}) {
-      let res = await getChat()
+      let da = {
+        username: localUser().username
+      }
+      let res = await getChat(da)
       if (res.success) {
         commit('setMessageNumber', res.data.length)
       }

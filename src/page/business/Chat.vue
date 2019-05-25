@@ -17,24 +17,33 @@
       <div class='no-msg' v-else>
         暂无最新消息
       </div>
+      <van-loading v-if="loading" color="#1989fa" size='70px' vertical>正在玩命加载中...</van-loading>
   </div>
 </template>
 
 <script>
-import {getChat} from '@/api/load-data.js'
+import {getBussinessChat} from '@/api/load-data.js'
+import {localUser} from '@/util/local.js'
 export default {
   data () {
     return {
-      chatList: []
+      chatList: [],
+      loading: true
     }
   },
   created () {
     this.$store.commit('setActiveMenu', 1)
   },
   mounted () {
-    getChat().then(res => {
+    let data = {
+      username: localUser().username
+    }
+    getBussinessChat(data).then(res => {
       if (res.success) {
+        this.loading = false
         this.chatList = res.data
+      } else {
+        this.loading = false
       }
     })
   },

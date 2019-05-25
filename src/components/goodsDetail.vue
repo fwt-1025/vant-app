@@ -34,7 +34,7 @@
       <van-goods-action-mini-btn
         icon="chat-o"
         text="客服"
-        info='2'
+        :info='messageNumber'
         @click="onClickChatBtn"
       />
       <van-goods-action-mini-btn
@@ -69,15 +69,18 @@
       @buy-clicked="onBuyClicked"
       @add-cart="onAddCartClicked"
     />
+    <van-loading v-if="loading" color="#1989fa" size='70px' vertical>正在玩命加载中...</van-loading>
   </div>
 </template>
 
 <script>
-import {saveCart, getCartGoods} from '@/api/load-data.js'
+import {saveCart, getCartGoods, getChat} from '@/api/load-data.js'
+import {localUser} from '@/util/local.js'
 export default {
   data () {
     return {
       cartNum: null,
+      messageNumber: null,
       showBase: false,
       goodsId: null,
       sku: {},
@@ -88,13 +91,15 @@ export default {
       resetSelectedSkuOnHide: false,
       closeOnClickOverlay: true,
       disableStepperInput: false,
-      messageConfig: {}
+      messageConfig: {},
+      loading: false
     }
   },
   created () {
     this.getCartNum()
-    this.goodsInfo = this.$route.query
-    // window.console.log(this.goodsInfo)
+    console.log(this.$route.params)
+    this.goodsInfo = this.$route.query.id ? this.$route.query : this.$route.params.id
+    console.log(this.goodsInfo)
     this.goods = {
       // 商品标题
       title: this.goodsInfo.descript,
@@ -153,9 +158,24 @@ export default {
   },
   methods: {
     getCartNum () {
-      getCartGoods().then(res => {
+      this.loading = true
+      let data = {
+        goodsid: '',
+        username: localUser().username
+      }
+      getCartGoods(data).then(res => {
         if (res.success) {
           this.cartNum = res.data.length
+          this.loading = false
+        }
+      })
+      let d = {
+        username: localUser().username
+      }
+      getChat(d).then(res => {
+        if (res.success) {
+          this.messageNumber = res.data.length
+          this.loading = false
         }
       })
     },
@@ -184,7 +204,9 @@ export default {
         price: this.goodsInfo.price,
         goodsdescript: this.goodsInfo.descript,
         goodsnumber: info.selectedNum,
-        imgurl: this.goodsInfo.imgurl
+        imgurl: this.goodsInfo.imgurl,
+        bussinessname: this.goodsInfo.bussinessname,
+        username: localUser().username
       }
       let d = []
       d.push(data)
@@ -193,15 +215,19 @@ export default {
       this.$router.push({path: '/goodsDetail/pay', query: {id: a}})
     },
     onAddCartClicked (info) {
+      this.loading = true
       let data = {
         goodsid: this.goodsInfo.id,
         price: this.goodsInfo.price,
         goodsdescript: this.goodsInfo.descript,
         goodsnumber: info.selectedNum,
-        imgurl: this.goodsInfo.imgurl
+        imgurl: this.goodsInfo.imgurl,
+        bussinessname: this.goodsInfo.bussinessname,
+        username: localUser().username
       }
       saveCart(data).then(res => {
         if (res.success) {
+          this.loading = false
           this.$toast.success('添加成功,宝贝在购物车等你哦')
           this.getCartNum()
         }

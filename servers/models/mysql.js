@@ -33,78 +33,82 @@ let query = (sql, values) => {
 let buyerUser = `
   create table if not exists buyerUser(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    userName VARCHAR(100) NOT NULL,
-    passWord VARCHAR(100) NOT NULL,
-    auth VARCHAR(100) NOT NULL,
-    phone VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
+    userName VARCHAR(255) NOT NULL,
+    passWord VARCHAR(255) NOT NULL,
+    auth VARCHAR(255) NOT NULL,
+    phone VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
     account_img LONGBLOB NOT NULL,
     createTime TIMESTAMP(4) NOT NULL);`
 
 let cartgoods = `
   create table if not exists cartgoods(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    goodsid VARCHAR(100) NOT NULL,
-    imgurl VARCHAR(400) NOT NULL,
-    price VARCHAR(100) NOT NULL,
-    goodsnumber VARCHAR(100) NOT NULL,
-    goodsdescript VARCHAR(100) NOT NULL
+    goodsid VARCHAR(255) NOT NULL,
+    imgurl LONGTEXT NOT NULL,
+    price VARCHAR(255) NOT NULL,
+    goodsnumber VARCHAR(255) NOT NULL,
+    goodsdescript VARCHAR(255) NOT NULL,
+    bussinessname VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL
   );`
 
 let address = `
   create table if not exists address(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    areaCode VARCHAR(100) NOT NULL,
-    addressDetail VARCHAR(100) NOT NULL,
-    tel VARCHAR(100) NOT NULL,
-    isDefault VARCHAR(100) NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    postalCode VARCHAR(100) NOT NULL,
-    province VARCHAR(100) NOT NULL,
-    city VARCHAR(100) NOT NULL,
-    county VARCHAR(100) NOT NULL,
+    areaCode VARCHAR(255) NOT NULL,
+    addressDetail VARCHAR(255) NOT NULL,
+    tel VARCHAR(255) NOT NULL,
+    isDefault VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    postalCode VARCHAR(255) NOT NULL,
+    province VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    county VARCHAR(255) NOT NULL,
     userid INT NOT NULL
   );`
 let paylist = `
   create table if not exists paylist(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    goodsid VARCHAR(100) NOT NULL,
+    goodsid VARCHAR(255) NOT NULL,
     imgurl LONGTEXT NOT NULL,
-    price VARCHAR(100) NOT NULL,
-    goodsnumber VARCHAR(100) NOT NULL,
-    goodsdescript VARCHAR(100) NOT NULL,
-    createtime VARCHAR(100) NOT NULL
+    price VARCHAR(255) NOT NULL,
+    goodsnumber VARCHAR(255) NOT NULL,
+    goodsdescript VARCHAR(255) NOT NULL,
+    bussinessname VARCHAR(255) NOT NULL,
+    createtime VARCHAR(255) NOT NULL
   );`
 let businessUser = `
   create table if not exists businessUser(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    userName VARCHAR(100) NOT NULL,
-    passWord VARCHAR(100) NOT NULL,
-    auth VARCHAR(100) NOT NULL,
-    phone VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
+    userName VARCHAR(255) NOT NULL,
+    passWord VARCHAR(255) NOT NULL,
+    auth VARCHAR(255) NOT NULL,
+    phone VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
     account_img LONGBLOB NOT NULL,
-    createTime VARCHAR(100) NOT NULL);`
+    createTime VARCHAR(255) NOT NULL);`
 
 let upload = `
   create table if not exists upload(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     data_source LONGBLOB NOT NULL,
-    data_name VARCHAR(100) NOT NULL,
-    goods_name VARCHAR(100) NOT NULL,
-    goods_price VARCHAR(100) NOT NULL,
-    goods_descript VARCHAR(100) NOT NULL,
-    goods_area VARCHAR(100) NOT NULL,
-    userName VARCHAR(100) NOT NULL,
+    data_name VARCHAR(255) NOT NULL,
+    goods_name VARCHAR(255) NOT NULL,
+    goods_price VARCHAR(255) NOT NULL,
+    goods_descript VARCHAR(255) NOT NULL,
+    goods_area VARCHAR(255) NOT NULL,
+    userName VARCHAR(255) NOT NULL,
     account_img LONGTEXT NOT NULL,
+    goods_id VARCHAR(255) NOT NULL,
     upload_time TIMESTAMP(4) NOT NULL
   );`
 let chat = `
 create table if not exists chat(
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  goods_name VARCHAR(100) NOT NULL,
-  buyerName VARCHAR(100) NOT NULL,
-  bussinessName VARCHAR(100) NOT NULL
+  goods_name VARCHAR(255) NOT NULL,
+  buyerName VARCHAR(255) NOT NULL,
+  bussinessName VARCHAR(255) NOT NULL
 );`
 let createTable = (sql) => {
   return query(sql, [])
@@ -144,17 +148,17 @@ let findUser = name => {
 
 // 存购物车
 let saveCart = obj => {
-  let _sql = `insert into cartgoods set goodsid=?,imgurl=?,price=?,goodsnumber=?,goodsdescript=?;`
+  let _sql = `insert into cartgoods set goodsid=?,imgurl=?,price=?,goodsnumber=?,goodsdescript=?,bussinessname=?,username=?;`
   return query(_sql, obj)
 }
 // 更新购物车中的数据(此操作仅在商品相同的情况下执行)
 let updateCartGoods = obj => {
-  let _sql = `update cartgoods set goodsnumber=? where goodsid="${obj[1]}"`
+  let _sql = `update cartgoods set goodsnumber=? where (goodsid="${obj[1]}" && username="${obj[2]}")`
   return query(_sql, obj)
 }
 // 取购物车中的数据
-let getCartGoods = id => {
-  let _sql = id ? `select * from cartgoods where goodsid="${id}"` : `select * from cartgoods`
+let getCartGoods = (da) => {
+  let _sql = da.goodsid ? `select * from cartgoods where (goodsid="${da.goodsid}" && username="${da.username}")` :`select * from cartgoods where username="${da.username}"`
   return query(_sql)
 }
 // 根据多个goodsid 查找购物车数据库中的数据
@@ -170,7 +174,7 @@ let getCartFormID = val => {
   return query(_sql)
 }
 // 从购物车中删除数据
-let deleteCartGoods = val => {
+let deleteCartGoods = (val,user) => {
   let data
   let data1 = []
   let _sql
@@ -178,7 +182,7 @@ let deleteCartGoods = val => {
     data = `${item}`
     data1.push(data)
   })
-  _sql = `DELETE FROM cartgoods WHERE goodsid in (${data1.join()})`
+  _sql = `DELETE FROM cartgoods WHERE (goodsid in (${data1.join()}) && username="${user}")`
   return query(_sql)
 }
 // 存详细地址
@@ -195,21 +199,21 @@ let payList = value => {
   let data1 = []
   let _sql
   for (let i in value) {
-    data = `('${value[i].goodsid}','${value[i].imgurl}','${value[i].price}','${value[i].goodsnumber}','${value[i].goodsdescript}', '${value[i].createtime}')`
+    data = `('${value[i].goodsid}','${value[i].imgurl}','${value[i].price}','${value[i].goodsnumber}','${value[i].goodsdescript}', '${value[i].bussinessname}', '${value[i].createtime}')`
     data1.push(data)
   }
-  _sql = `insert into paylist(goodsid,imgurl,price,goodsnumber,goodsdescript,createtime) VALUES ${data1.join()};`
+  _sql = `insert into paylist(goodsid,imgurl,price,goodsnumber,goodsdescript,bussinessname,createtime) VALUES ${data1.join()};`
   console.log(_sql)
   return query(_sql)
 }
-let getPayList = () => {
-  let _sql = `select * from paylist`
+let getPayList = (user) => {
+  let _sql = `select * from paylist where bussinessname = "${user}"`
   return query(_sql)
 }
 // 根据购买时间统计数量
-let echPayList = () => {
+let echPayList = (username) => {
   let _sql = `select date_format(createtime, '%Y-%m-%d') as time,sum(goodsnumber) 
-  from paylist 
+  from paylist where bussinessname = "${username}"
   GROUP BY date_format(createtime, '%Y-%m-%d');`
   return query(_sql)
 }
@@ -236,19 +240,25 @@ let findSeller = name => {
 }
 // 卖家上传图片
 let uploadImg = value => {
-  let _sql = `insert into upload set data_source=?,data_name=?,goods_name=?,goods_price=?,goods_area=?,goods_descript=?,userName=?,account_img=?,upload_time=?;`
+  let _sql = `insert into upload set data_source=?,data_name=?,goods_name=?,goods_price=?,goods_area=?,goods_descript=?,userName=?,account_img=?,goods_id=?,upload_time=?;`
   return query(_sql, value)
 }
 let findSellerGoods = _ => {
-  let _sql = `select * from upload`
+  let _sql = `SELECT * FROM upload ORDER BY upload_time DESC;`
   return query(_sql)
 }
 let insertChat = value => {
   let _sql = `insert into chat set goods_name=?,buyerName=?,bussinessName=?;`
   return query(_sql, value)
 }
+// 查询买家聊天列表
 let findChat = value => {
-  let _sql = value ? `select * from chat where buyerName="${value}"` : `select * from chat`
+  let _sql = `select * from chat where buyerName="${value.username}"`
+  return query(_sql)
+}
+// 查询商家聊天列表
+let findBussinessChat = value => {
+  let _sql = `select * from chat where bussinessName="${value.username}"`
   return query(_sql)
 }
 module.exports = {
@@ -273,5 +283,6 @@ module.exports = {
   findSeller,
   findSellerGoods,
   insertChat,
-  findChat
+  findChat,
+  findBussinessChat
 }

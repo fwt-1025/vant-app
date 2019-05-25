@@ -11,6 +11,7 @@
 
 <script>
 import {getEchPayList} from '@/api/load-data.js'
+import {localUser} from '@/util/local.js'
 export default {
   data () {
     return {
@@ -24,7 +25,8 @@ export default {
     this.$store.commit('setActiveMenu', 2)
   },
   mounted () {
-    getEchPayList().then(res => {
+    let d = localUser().username
+    getEchPayList(d).then(res => {
       this.goodsData = res.data
       this.init()
     })

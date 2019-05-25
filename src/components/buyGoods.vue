@@ -55,13 +55,14 @@
         @close='onClose'
       />
     </van-popup>
-    
+    <van-loading v-if="loading" color="#1989fa" size='70px' vertical>正在玩命加载中...</van-loading>
   </div>
 </template>
 
 <script>
 import {getCartFormId, payList, deleteCartGoods} from '@/api/load-data.js'
 import {mapState} from 'vuex'
+import {localUser} from '@/util/local.js'
 export default {
   data () {
     return {
@@ -76,7 +77,8 @@ export default {
       user: {},
       showGoodsList: [],
       goodsInfo: [],
-      allPrice: null
+      allPrice: null,
+      loading: false
     }
   },
   computed: mapState({
@@ -120,10 +122,7 @@ export default {
     },
     onClose () {
       var that = this
-      console.log(this.goodsId)
-      let d = {
-        goodsid: this.goodsId
-      }
+      this.loading = true
       this.showGoodsList.map(item => {
         item.createtime = this.$moment().format('YYYY-MM-DD')
         // item.createtime = new Date()
@@ -131,6 +130,7 @@ export default {
       payList(this.showGoodsList).then(res => {
         if (res.success) {
           if (this.$route.query.id) {
+            this.loading = false
             this.$toast({
               type: 'success',
               mask: true,
@@ -142,8 +142,13 @@ export default {
               }
             })
           } else {
-            deleteCartGoods(d).then(re => {
+            let data = {
+              goodsid: this.goodsId,
+              username: localUser().username
+            }
+            deleteCartGoods(data).then(re => {
               if (re.success) {
+                this.loading = false
                 this.$toast({
                   type: 'success',
                   mask: true,
@@ -158,6 +163,7 @@ export default {
             })
           }
         } else {
+          this.loading = false
           this.$toast.success('结算失败')
         }
       })

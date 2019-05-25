@@ -1,6 +1,23 @@
 const mySqlModels = require('../models/mysql')
+// 查询数据库chat表中买家用户的聊天列表
 exports.getChat = async (ctx, next) => {
-  await mySqlModels.findChat().then(res => {
+  let user = ctx.request.query
+  console.log(user)
+  await mySqlModels.findChat(user).then(res => {
+    if (res) {
+      ctx.body = {
+        message: '',
+        data: res,
+        success: true
+      }
+    }
+  })
+}
+// 查询数据库chat表中商家用户的聊天列表
+exports.findBussinessChat = async (ctx, next) => {
+  let user = ctx.request.query
+  console.log(user)
+  await mySqlModels.findBussinessChat(user).then(res => {
     if (res) {
       ctx.body = {
         message: '',

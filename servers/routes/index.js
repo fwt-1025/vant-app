@@ -53,14 +53,16 @@ router.post('/uploadFile', Upload.single('file'), uploader.uploadFile)
 router.get('/getGoods', seller.sellerGoods)
 // 获取商品
 router.post('/getVipGoods', proxy.getGoods)
-// 获取聊天列表
+// 获取买家聊天列表
 router.get('/getChat', chat.getChat)
+// 获取商家聊天列表
+router.get('/getBussinessChat', chat.findBussinessChat)
 // 添加聊天人
 router.post('/setChat', chat.setChat)
 // 注册商家
 router.post('/registerBusiness', seller.registerSeller)
 // 商家登录
 router.post('/loginBusiness', seller.loginSeller)
-// 商家查询
+// 查询商家详细信息
 router.post('/findSellerUser', seller.findSellerUser)
 module.exports = router

@@ -52,10 +52,11 @@ export default {
         data = {
           id: '3000' + i,
           descript: '上衣打折快来抢购' + i,
-          price: (Math.ceil(Math.random()*100) + 20.99).toFixed(2),
-          payNumber: Math.ceil(Math.random() * 1000),
+          price: (Math.ceil(Math.random()*100) + 20).toFixed(2),
+          payNumber: Math.ceil(Math.random() * 100),
           payarea: '北京市',
-          imgurl: require(`@/assets/${this.cloName}/${(i + 1)}.jpg`)
+          imgurl: require(`@/assets/${this.cloName}/${(i + 1)}.jpg`),
+          bussinessname: 'admin'
         }
         this.shopData.push(data)
       }

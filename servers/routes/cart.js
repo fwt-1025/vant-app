@@ -3,12 +3,16 @@ const userModel = require('../models/mysql')
 
 exports.saveCart = async (ctx, next) => {
   let goods = ctx.request.body
-  let data = [goods.goodsid, goods.imgurl, goods.price, goods.goodsnumber, goods.goodsdescript]
+  let data = [goods.goodsid, goods.imgurl, goods.price, goods.goodsnumber, goods.goodsdescript,goods.bussinessname, goods.username]
   // 存购物车数据时,要考虑是否存了同一件商品,所以要先查找数据库中是否已存在相同的商品
-  await userModel.getCartGoods(goods.goodsid).then(async res => {
+  let da = {
+    goodsid: goods.goodsid,
+    username: goods.username
+  }
+  await userModel.getCartGoods(da).then(async res => {
     if (res.length > 0) {
       let goodsnumber = Number(res[0].goodsnumber) + Number(goods.goodsnumber)
-      await userModel.updateCartGoods([goodsnumber.toString(), goods.goodsid]).then(rex => {
+      await userModel.updateCartGoods([goodsnumber.toString(), goods.goodsid, goods.username]).then(rex => {
         if (rex.protocol41) {
           ctx.body = {
             success: true,
@@ -44,8 +48,8 @@ exports.saveCart = async (ctx, next) => {
 }
 // 从数据库取购物车数据
 exports.getCartGoods = async (ctx, next) => {
-  let id = ctx.request.query.goodsid
-  await userModel.getCartGoods(id).then(res => {
+  let da = ctx.request.query
+  await userModel.getCartGoods(da).then(res => {
     if (res) {
       ctx.body = {
         success: true,
@@ -64,9 +68,8 @@ exports.getCartGoods = async (ctx, next) => {
 // 从数据库中删除指定数据
 exports.deleteCartGoods = async (ctx, next) => {
   let goodsId = ctx.request.body.goodsid
-  console.log('goodsId', goodsId)
-  await userModel.deleteCartGoods(goodsId).then(res => {
-    console.log(res)
+  let username = ctx.request.body.username
+  await userModel.deleteCartGoods(goodsId, username).then(res => {
     if (res.protocol41) {
       ctx.body = {
         success: true,
@@ -105,7 +108,6 @@ exports.getCartFormId = async (ctx, next) => {
 //结算
 exports.payList = async (ctx, next) => {
   let goods = eval(ctx.request.body)
-  console.log('goods', goods)
   // 存购物车数据时,要考虑是否存了同一件商品,所以要先查找数据库中是否已存在相同的商品
   await userModel.payList(goods).then(res => {
     if (res.insertId) {
@@ -142,7 +144,9 @@ exports.getPayList = async (ctx, next) => {
 }
 // 根据时间统计购买数量
 exports.echPayList = async (ctx) => {
-  await userModel.echPayList().then(res => {
+  let d = ctx.request.query[0]
+  console.log(d)
+  await userModel.echPayList(d).then(res => {
     if (res) {
       let d = []
       res.map((item,index) => {

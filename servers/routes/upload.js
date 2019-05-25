@@ -9,7 +9,7 @@ exports.uploadFile = async (ctx, next) => {
   datas.data_source = ctx.req.file.buffer
   datas.data_name = ctx.req.file.originalname
   let upload_time = new Date()
-  let data = [datas.data_source, datas.data_name, ctx.req.body.goods_name, ctx.req.body.goods_price, ctx.req.body.goods_descript, ctx.req.body.goods_area, ctx.req.body.userName,ctx.req.body.account_img, upload_time]
+  let data = [datas.data_source, datas.data_name, ctx.req.body.goods_name, ctx.req.body.goods_price, ctx.req.body.goods_descript, ctx.req.body.goods_area, ctx.req.body.userName,ctx.req.body.account_img,ctx.req.body.goodsid, upload_time]
   await uploadMysql.uploadImg(data).then(res => {
     if (res.warningCount === 0) {
       ctx.body = {

@@ -34,4 +34,11 @@ html,body,div,p,img,span,ul,li,h1~h6{
   position: fixed;
   width: 100%;
 }
+.van-loading{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+}
 </style>

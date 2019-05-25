@@ -42,12 +42,13 @@
       <p>购物车里啥都没有,在忙也要记得买点东西犒劳自己</p>
       <van-button type="info" @click="$router.push('/home')">去逛逛</van-button>
     </div>
+    <van-loading v-if="loading" color="#1989fa" size='70px' vertical>正在玩命加载中...</van-loading>
   </div>
 </template>
 
 <script>
 import {getCartGoods, deleteCartGoods} from '@/api/load-data.js'
-import { setTimeout } from 'timers';
+import { localUser } from '@/util/local.js';
 export default {
   data () {
     return {
@@ -58,7 +59,8 @@ export default {
       allGoodPrice: 0,
       checkList: [],
       goodsCheckList: [],
-      listIndex: null
+      listIndex: null,
+      loading: true
     }
   },
   created () {
@@ -69,8 +71,13 @@ export default {
   },
   methods: {
     getGoodsList () {
-      getCartGoods().then(res => {
+      let da = {
+        goodsid: '',
+        username: localUser().username
+      }
+      getCartGoods(da).then(res => {
         if (res.success) {
+          this.loading = false
           this.goodsList = res.data
           this.goodsList.map(() => {
             var f = false
@@ -78,6 +85,7 @@ export default {
             // this.checkList.push(null)
           })
         } else {
+          this.loading = false
           this.$toast.fail('网络开小差了!稍后再试')
         }
       })
@@ -140,7 +148,6 @@ export default {
       if (info) this.getAllPrice(false, info.price, 1)
     },
     onSubmit () {
-      console.log(this.goodsCheckList)
       if (this.checkList.length === 0) { 
         this.$toast.fail('请选择一个商品')
         return false
@@ -151,7 +158,8 @@ export default {
           this.$router.push({name: 'pay'})
         } else {
           let data = {
-            goodsid: this.checkList
+            goodsid: this.checkList,
+            username: localUser().username
           }
           deleteCartGoods(data).then(res => {
             if (res.success) {

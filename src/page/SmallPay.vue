@@ -9,7 +9,7 @@
           <div v-for="(item,index) in showList" :key='index' class="uploadGoods" @click="goodDetails(item)">
             <div class="seller-top" style="margin-bottom: 5vw;">
               <span class="pic">
-                <img v-if="item.account_img" class="img-box" :src="item.account_img" alt="">
+                <img v-if="item.account_img > 22" class="img-box" :src="item.account_img" alt="">
                 <van-icon class="user-icon" v-else name="user-circle-o" />
               </span>{{item.userName}} 于 {{$moment(item.upload_time).format('YYYY-MM-DD HH:mm:ss')}}发布了</div>
             <img :src="item.data_source" alt="" @click="show = true">
@@ -28,6 +28,7 @@
         </div>
         </van-pull-refresh>
       </div>
+      <van-loading v-if="loading" color="#1989fa" size='70px' vertical>正在玩命加载中...</van-loading>
   </div>
 </template>
 
@@ -41,23 +42,28 @@ export default {
       showList: [],
       images: [],
       show: false,
-      isLoading: false
+      isLoading: false,
+      loading: true
     }
   },
   created () {
     this.$store.commit('setActiveMenu', 1)
   },
   mounted () {
+    // 获取商家上传的商品
     getSellerGoods().then(res => {
       if (res.success) {
-          res.data.map(item => {
-            var str12 = this.arrayBufferToBase64(item.data_source.data)//转换字符串
-            item.data_source = 'data:image/png;base64,' + str12
-            this.images.push(item.data_source)
-            // var str13 = this.arrayBufferToBase64(item.account_img.data)//转换字符串
-            // item.account_img = 'data:image/png;base64,' + str13
-          })
+        this.loading = false
+        res.data.map(item => {
+          var str12 = this.arrayBufferToBase64(item.data_source.data)//转换字符串
+          item.data_source = 'data:image/png;base64,' + str12
+          this.images.push(item.data_source)
+          // var str13 = this.arrayBufferToBase64(item.account_img.data)//转换字符串
+          // item.account_img = 'data:image/png;base64,' + str13
+        })
         this.showList = res.data
+      } else {
+        this.loading =false
       }
     })
     this.addshowPop = true
@@ -72,7 +78,19 @@ export default {
       }
       return window.btoa( binary )
     },
-    goodDetails () {},
+    goodDetails (item) {
+      // console.log(item)
+      let data = {
+          id: item.goods_id,
+          descript: item.goods_descript,
+          price: item.goods_price,
+          payNumber: Math.ceil(Math.random() * 100),
+          payarea: item.goods_area,
+          imgurl: item.data_source,
+          bussinessname: item.userName
+        }
+      this.$router.push({name: 'goodsDetail', params: {id: data}})
+    },
     chat (item, e) {
       e.preventDefault()
       e.stopPropagation()
@@ -81,7 +99,6 @@ export default {
         bussinessName: item.userName,
         buyerName: localUser().username
       }
-      console.log('itemUser', item.userName)
       setChat(data).then(res => {
         this.$router.push({path: '/buyerchat', query: {id: item.userName}})
       })
