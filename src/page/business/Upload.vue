@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-nav-bar
-        title="上传商品"
+        title="发布商品"
       />
     <van-cell-group style="margin-top: 60px;">
       <van-field
@@ -11,7 +11,6 @@
         label="商品名称"
         placeholder="请输入商品名称"
       />
-
       <van-field
         v-model="goodInfo.goods_price"
         type="number"
